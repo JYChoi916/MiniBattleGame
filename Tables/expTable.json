@@ -1,0 +1,14 @@
+[
+  {
+    "expID": "novice_exp",
+    "maxLevel": 5,
+    "firstLevelUpEXP": 10,
+    "coefficient": 9
+  },
+  {
+    "expID": "first_job_exp",
+    "maxLevel": 10,
+    "firstLevelUpEXP": 40,
+    "coefficient": 20
+  }
+]

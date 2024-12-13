@@ -1,0 +1,68 @@
+[
+  {
+    "classID": "Novice",
+    "name": "모험가",
+    "levelUpID": 0,
+    "upStr": 1,
+    "upInt": 1,
+    "upVit": 1,
+    "upDex": 1,
+    "upAgi": 1,
+    "upLuk": 1
+  },
+  {
+    "classID": "SwordMan",
+    "name": "검사",
+    "levelUpID": 1,
+    "upStr": 2,
+    "upInt": 1,
+    "upVit": 2,
+    "upDex": 1,
+    "upAgi": 1,
+    "upLuk": 1
+  },
+  {
+    "classID": "Magician",
+    "name": "마술사",
+    "levelUpID": 1,
+    "upStr": 1,
+    "upInt": 3,
+    "upVit": 1,
+    "upDex": 1,
+    "upAgi": 1,
+    "upLuk": 1
+  },
+  {
+    "classID": "Acolyte",
+    "name": "견습신부",
+    "levelUpID": 1,
+    "upStr": 1,
+    "upInt": 2,
+    "upVit": 2,
+    "upDex": 1,
+    "upAgi": 1,
+    "upLuk": 1
+  },
+  {
+    "classID": "Thief",
+    "name": "도둑",
+    "levelUpID": 1,
+    "upStr": 1,
+    "upInt": 1,
+    "upVit": 1,
+    "upDex": 1,
+    "upAgi": 2,
+    "upLuk": 2
+  },
+  {
+    "classID": "Archer",
+    "name": "궁수",
+    "levelUpID": 1,
+    "upStr": 1,
+    "upInt": 1,
+    "upVit": 1,
+    "upDex": 2,
+    "upAgi": 2,
+    "upLuk": 1
+  }
+]

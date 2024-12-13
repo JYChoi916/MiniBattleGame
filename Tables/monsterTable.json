@@ -1,0 +1,229 @@
+[
+  {
+    "monsterID": "mon_01_01",
+    "name": "슬라임",
+    "hp": 20,
+    "mp": 0,
+    "strength": 5,
+    "intelligence": 1,
+    "vitality": 2,
+    "dexterity": 1,
+    "agility": 1,
+    "luck": 0,
+    "deathExp": 3,
+    "minGold": 20,
+    "maxGold": 30,
+    "usingSkillIDList": [],
+    "skillRatioList": [],
+    "itemDropList": [
+      0,
+      17
+    ],
+    "itemDropRates": [
+      5,
+      50
+    ]
+  },
+  {
+    "monsterID": "mon_01_02",
+    "name": "고블린",
+    "hp": 50,
+    "mp": 0,
+    "strength": 7,
+    "intelligence": 1,
+    "vitality": 4,
+    "dexterity": 1,
+    "agility": 2,
+    "luck": 0,
+    "deathExp": 5,
+    "minGold": 30,
+    "maxGold": 50,
+    "usingSkillIDList": [],
+    "skillRatioList": [],
+    "itemDropList": [
+      0,
+      18
+    ],
+    "itemDropRates": [
+      10,
+      30
+    ]
+  },
+  {
+    "monsterID": "mon_01_03",
+    "name": "오크",
+    "hp": 100,
+    "mp": 0,
+    "strength": 10,
+    "intelligence": 2,
+    "vitality": 5,
+    "dexterity": 2,
+    "agility": 2,
+    "luck": 2,
+    "deathExp": 15,
+    "minGold": 100,
+    "maxGold": 150,
+    "usingSkillIDList": [],
+    "skillRatioList": [],
+    "itemDropList": [
+      0,
+      19,
+      6,
+      7,
+      9,
+      11,
+      13,
+      15
+    ],
+    "itemDropRates": [
+      10,
+      30,
+      5,
+      2,
+      5,
+      5,
+      5,
+      5
+    ]
+  },
+  {
+    "monsterID": "mon_01_04",
+    "name": "스켈레톤",
+    "hp": 60,
+    "mp": 0,
+    "strength": 12,
+    "intelligence": 2,
+    "vitality": 4,
+    "dexterity": 2,
+    "agility": 3,
+    "luck": 3,
+    "deathExp": 7,
+    "minGold": 50,
+    "maxGold": 75,
+    "usingSkillIDList": [],
+    "skillRatioList": [],
+    "itemDropList": [
+      0,
+      20
+    ],
+    "itemDropRates": [
+      10,
+      30
+    ]
+  },
+  {
+    "monsterID": "mon_01_05",
+    "name": "고블린궁수",
+    "hp": 35,
+    "mp": 0,
+    "strength": 15,
+    "intelligence": 1,
+    "vitality": 2,
+    "dexterity": 1,
+    "agility": 2,
+    "luck": 2,
+    "deathExp": 8,
+    "minGold": 50,
+    "maxGold": 75,
+    "usingSkillIDList": [],
+    "skillRatioList": [],
+    "itemDropList": [
+      0,
+      18
+    ],
+    "itemDropRates": [
+      15,
+      35
+    ]
+  },
+  {
+    "monsterID": "mon_01_06",
+    "name": "고블린리더",
+    "hp": 100,
+    "mp": 20,
+    "strength": 15,
+    "intelligence": 3,
+    "vitality": 5,
+    "dexterity": 3,
+    "agility": 5,
+    "luck": 5,
+    "deathExp": 30,
+    "minGold": 150,
+    "maxGold": 200,
+    "usingSkillIDList": [],
+    "skillRatioList": [],
+    "itemDropList": [
+      1,
+      3,
+      21,
+      16
+    ],
+    "itemDropRates": [
+      10,
+      5,
+      30,
+      2
+    ]
+  },
+  {
+    "monsterID": "mon_01_07",
+    "name": "오시리스",
+    "hp": 250,
+    "mp": 100,
+    "strength": 35,
+    "intelligence": 10,
+    "vitality": 10,
+    "dexterity": 5,
+    "agility": 20,
+    "luck": 5,
+    "deathExp": 100,
+    "minGold": 500,
+    "maxGold": 800,
+    "usingSkillIDList": [
+      "fatal_blow",
+      "bash"
+    ],
+    "skillRatioList": [
+      10
+    ],
+    "itemDropList": [
+      2,
+      3
+    ],
+    "itemDropRates": [
+      100,
+      100
+    ]
+  },
+  {
+    "monsterID": "mon_01_08",
+    "name": "다크로드",
+    "hp": 500,
+    "mp": 150,
+    "strength": 50,
+    "intelligence": 20,
+    "vitality": 20,
+    "dexterity": 10,
+    "agility": 30,
+    "luck": 10,
+    "deathExp": 200,
+    "minGold": 1000,
+    "maxGold": 2000,
+    "usingSkillIDList": [
+      "fatal_blow",
+      "bash"
+    ],
+    "skillRatioList": [
+      5,
+      10
+    ],
+    "itemDropList": [
+      2,
+      3
+    ],
+    "itemDropRates": [
+      100,
+      100
+    ]
+  }
+]

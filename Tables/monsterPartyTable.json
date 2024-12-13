@@ -1,0 +1,91 @@
+[
+  {
+    "partyID": "m_party_00",
+    "monsterIDList": [
+      "mon_01_01"
+    ],
+    "maxCount": 3
+  },
+  {
+    "partyID": "m_party_01",
+    "monsterIDList": [
+      "mon_01_02"
+    ],
+    "maxCount": 3
+  },
+  {
+    "partyID": "m_party_02",
+    "monsterIDList": [
+      "mon_01_01",
+      "mon_01_02"
+    ],
+    "maxCount": 3
+  },
+  {
+    "partyID": "m_party_03",
+    "monsterIDList": [
+      "mon_01_03"
+    ],
+    "maxCount": 1
+  },
+  {
+    "partyID": "m_party_04",
+    "monsterIDList": [
+      "mon_01_02",
+      "mon_01_05"
+    ],
+    "maxCount": 4
+  },
+  {
+    "partyID": "m_party_05",
+    "monsterIDList": [
+      "mon_01_04"
+    ],
+    "maxCount": 3
+  },
+  {
+    "partyID": "m_party_06",
+    "monsterIDList": [
+      "mon_01_02",
+      "mon_01_04",
+      "mon_01_05"
+    ],
+    "maxCount": 4
+  },
+  {
+    "partyID": "m_party_07",
+    "monsterIDList": [
+      "mon_01_02",
+      "mon_01_05"
+    ],
+    "maxCount": 4
+  },
+  {
+    "partyID": "m_party_08",
+    "monsterIDList": [
+      "mon_01_05"
+    ],
+    "maxCount": 1
+  },
+  {
+    "partyID": "m_party_09",
+    "monsterIDList": [
+      "mon_01_06"
+    ],
+    "maxCount": 1
+  },
+  {
+    "partyID": "m_party_10",
+    "monsterIDList": [
+      "mon_01_07"
+    ],
+    "maxCount": 1
+  },
+  {
+    "partyID": "m_party_11",
+    "monsterIDList": [
+      "mon_01_08"
+    ],
+    "maxCount": 1
+  }
+]

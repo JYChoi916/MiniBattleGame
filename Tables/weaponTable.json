@@ -1,0 +1,157 @@
+[
+  {
+    "itemID": "wood_sword",
+    "attackType": "Melee",
+    "plusATK": 10,
+    "percentATK": 0,
+    "percentMATK": 0,
+    "criticalRatio": 5,
+    "equipableClasses": [
+      -1
+    ]
+  },
+  {
+    "itemID": "short_sword",
+    "attackType": "Melee",
+    "plusATK": 20,
+    "percentATK": 0,
+    "percentMATK": 0,
+    "criticalRatio": 5,
+    "equipableClasses": [
+      0,
+      1,
+      4
+    ]
+  },
+  {
+    "itemID": "long_sword",
+    "attackType": "Melee",
+    "plusATK": 30,
+    "percentATK": 0,
+    "percentMATK": 0,
+    "criticalRatio": 5,
+    "equipableClasses": [
+      0,
+      1,
+      4
+    ]
+  },
+  {
+    "itemID": "twohanded_sword",
+    "attackType": "Melee",
+    "plusATK": 50,
+    "percentATK": 0,
+    "percentMATK": 0,
+    "criticalRatio": 5,
+    "equipableClasses": [
+      1
+    ]
+  },
+  {
+    "itemID": "wand",
+    "attackType": "Magic",
+    "plusATK": 10,
+    "percentATK": 0,
+    "percentMATK": 15,
+    "criticalRatio": 5,
+    "equipableClasses": [
+      2
+    ]
+  },
+  {
+    "itemID": "staff",
+    "attackType": "Magic",
+    "plusATK": 15,
+    "percentATK": 0,
+    "percentMATK": 20,
+    "criticalRatio": 5,
+    "equipableClasses": [
+      2
+    ]
+  },
+  {
+    "itemID": "mace",
+    "attackType": "Melee",
+    "plusATK": 15,
+    "percentATK": 0,
+    "percentMATK": 10,
+    "criticalRatio": 5,
+    "equipableClasses": [
+      1,
+      3
+    ]
+  },
+  {
+    "itemID": "club",
+    "attackType": "Melee",
+    "plusATK": 25,
+    "percentATK": 0,
+    "percentMATK": 15,
+    "criticalRatio": 10,
+    "equipableClasses": [
+      1,
+      3
+    ]
+  },
+  {
+    "itemID": "knife",
+    "attackType": "Melee",
+    "plusATK": 15,
+    "percentATK": 0,
+    "percentMATK": 0,
+    "criticalRatio": 15,
+    "equipableClasses": [
+      1,
+      4
+    ]
+  },
+  {
+    "itemID": "dagger",
+    "attackType": "Melee",
+    "plusATK": 25,
+    "percentATK": 0,
+    "percentMATK": 0,
+    "criticalRatio": 20,
+    "equipableClasses": [
+      1,
+      4
+    ]
+  },
+  {
+    "itemID": "short_bow",
+    "attackType": "Range",
+    "plusATK": 15,
+    "percentATK": 0,
+    "percentMATK": 0,
+    "criticalRatio": 10,
+    "equipableClasses": [
+      5
+    ]
+  },
+  {
+    "itemID": "long_bow",
+    "attackType": "Range",
+    "plusATK": 25,
+    "percentATK": 0,
+    "percentMATK": 0,
+    "criticalRatio": 10,
+    "equipableClasses": [
+      5
+    ]
+  },
+  {
+    "itemID": "vadzerald",
+    "attackType": "Melee",
+    "plusATK": 40,
+    "percentATK": 20,
+    "percentMATK": 20,
+    "criticalRatio": 15,
+    "equipableClasses": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  }
+]

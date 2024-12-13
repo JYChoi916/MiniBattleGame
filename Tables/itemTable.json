@@ -1,0 +1,178 @@
+[
+  {
+    "id": 0,
+    "name": "소형 HP회복약",
+    "itemID": "small_potion",
+    "type": "Consumable",
+    "maxStack": 20,
+    "price": 30
+  },
+  {
+    "id": 1,
+    "name": "중형 HP회복약",
+    "itemID": "middle_potion",
+    "type": "Consumable",
+    "maxStack": 20,
+    "price": 50
+  },
+  {
+    "id": 2,
+    "name": "대형 HP회복약",
+    "itemID": "large_potion",
+    "type": "Consumable",
+    "maxStack": 20,
+    "price": 100
+  },
+  {
+    "id": 3,
+    "name": "MP회복약",
+    "itemID": "mp_potion",
+    "type": "Consumable",
+    "maxStack": 20,
+    "price": 300
+  },
+  {
+    "id": 4,
+    "name": "목검",
+    "itemID": "wood_sword",
+    "type": "Weapon",
+    "maxStack": 2,
+    "price": 150
+  },
+  {
+    "id": 5,
+    "name": "숏소드",
+    "itemID": "short_sword",
+    "type": "Weapon",
+    "maxStack": 2,
+    "price": 250
+  },
+  {
+    "id": 6,
+    "name": "롱소드",
+    "itemID": "long_sword",
+    "type": "Weapon",
+    "maxStack": 2,
+    "price": 500
+  },
+  {
+    "id": 7,
+    "name": "양손검",
+    "itemID": "twohanded_sword",
+    "type": "Weapon",
+    "maxStack": 2,
+    "price": 1000
+  },
+  {
+    "id": 8,
+    "name": "완드",
+    "itemID": "wand",
+    "type": "Weapon",
+    "maxStack": 2,
+    "price": 250
+  },
+  {
+    "id": 9,
+    "name": "스태프",
+    "itemID": "staff",
+    "type": "Weapon",
+    "maxStack": 2,
+    "price": 500
+  },
+  {
+    "id": 10,
+    "name": "메이스",
+    "itemID": "mace",
+    "type": "Weapon",
+    "maxStack": 2,
+    "price": 250
+  },
+  {
+    "id": 11,
+    "name": "클럽",
+    "itemID": "club",
+    "type": "Weapon",
+    "maxStack": 2,
+    "price": 500
+  },
+  {
+    "id": 12,
+    "name": "나이프",
+    "itemID": "knife",
+    "type": "Weapon",
+    "maxStack": 2,
+    "price": 250
+  },
+  {
+    "id": 13,
+    "name": "대거",
+    "itemID": "dagger",
+    "type": "Weapon",
+    "maxStack": 2,
+    "price": 500
+  },
+  {
+    "id": 14,
+    "name": "숏보우",
+    "itemID": "short_bow",
+    "type": "Weapon",
+    "maxStack": 2,
+    "price": 250
+  },
+  {
+    "id": 15,
+    "name": "롱보우",
+    "itemID": "long_bow",
+    "type": "Weapon",
+    "maxStack": 2,
+    "price": 500
+  },
+  {
+    "id": 16,
+    "name": "바제랄드",
+    "itemID": "vadzerald",
+    "type": "Weapon",
+    "maxStack": 2,
+    "price": 5000
+  },
+  {
+    "id": 17,
+    "name": "슬라임 조각",
+    "itemID": "slime_gel",
+    "type": "Consumable",
+    "maxStack": 99,
+    "price": 10
+  },
+  {
+    "id": 18,
+    "name": "고블린 이빨",
+    "itemID": "goblin_tooth",
+    "type": "Consumable",
+    "maxStack": 99,
+    "price": 20
+  },
+  {
+    "id": 19,
+    "name": "오크의 손톱",
+    "itemID": "orc_nail",
+    "type": "Consumable",
+    "maxStack": 99,
+    "price": 30
+  },
+  {
+    "id": 20,
+    "name": "스켈레톤의 뼈",
+    "itemID": "skeleton_bone",
+    "type": "Consumable",
+    "maxStack": 99,
+    "price": 25
+  },
+  {
+    "id": 21,
+    "name": "고블린 뿔",
+    "itemID": "goblin_horn",
+    "type": "Consumable",
+    "maxStack": 99,
+    "price": 50
+  }
+]

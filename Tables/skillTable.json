@@ -1,0 +1,198 @@
+[
+  {
+    "skillID": "fatal_blow",
+    "name": "급소치기",
+    "desc_1": "{0}이(가) 스턴에 걸립니다.",
+    "canGetClass": [
+      "Novice"
+    ],
+    "affectiveStatus": "Strength",
+    "mpCost": 2,
+    "skillType": 1,
+    "targetType": 0,
+    "attackType": 0,
+    "skillParams": [
+      150,
+      15,
+      1,
+      -1
+    ],
+    "getClassLevel": 3
+  },
+  {
+    "skillID": "bash",
+    "name": "배쉬",
+    "desc_1": null,
+    "canGetClass": [
+      "SwordMan"
+    ],
+    "affectiveStatus": "Strength",
+    "mpCost": 8,
+    "skillType": 1,
+    "targetType": 0,
+    "attackType": 0,
+    "skillParams": [
+      250
+    ],
+    "getClassLevel": 1
+  },
+  {
+    "skillID": "magnum_break",
+    "name": "매그넘 브레이크",
+    "desc_1": null,
+    "canGetClass": [
+      "SwordMan"
+    ],
+    "affectiveStatus": "Strength",
+    "mpCost": 20,
+    "skillType": 1,
+    "targetType": 1,
+    "attackType": 0,
+    "skillParams": [
+      200,
+      15,
+      1
+    ],
+    "getClassLevel": 5
+  },
+  {
+    "skillID": "napalm_beat",
+    "name": "네이팜 비트",
+    "desc_1": "근처의 {0}와(과) {1}이(가) {2}의 데미지를 입었습니다.",
+    "canGetClass": [
+      "Magician"
+    ],
+    "affectiveStatus": "Intelligence",
+    "mpCost": 9,
+    "skillType": 1,
+    "targetType": 0,
+    "attackType": 1,
+    "skillParams": [
+      80,
+      40
+    ],
+    "getClassLevel": 1
+  },
+  {
+    "skillID": "thunder_storm",
+    "name": "썬더 스톰",
+    "desc_1": null,
+    "canGetClass": [
+      "Magician"
+    ],
+    "affectiveStatus": "Intelligence",
+    "mpCost": 29,
+    "skillType": 1,
+    "targetType": 1,
+    "attackType": 1,
+    "skillParams": [
+      80
+    ],
+    "getClassLevel": 5
+  },
+  {
+    "skillID": "heal",
+    "name": "힐",
+    "desc_1": "{0}이(가) 를 회복합니다.",
+    "canGetClass": [
+      "Acolyte"
+    ],
+    "affectiveStatus": "Intelligence",
+    "mpCost": 13,
+    "skillType": 1,
+    "targetType": 0,
+    "attackType": 1,
+    "skillParams": [
+      100
+    ],
+    "getClassLevel": 1
+  },
+  {
+    "skillID": "holy_light",
+    "name": "홀리 라이트",
+    "desc_1": "근처의 {0}와(과) {1}이(가) {2}의 데미지를 입었습니다.",
+    "canGetClass": [
+      "Acolyte"
+    ],
+    "affectiveStatus": "Intelligence",
+    "mpCost": 15,
+    "skillType": 1,
+    "targetType": 0,
+    "attackType": 1,
+    "skillParams": [
+      120,
+      60
+    ],
+    "getClassLevel": 5
+  },
+  {
+    "skillID": "increase_dodge",
+    "name": "회피율 증가",
+    "desc_1": null,
+    "canGetClass": [
+      "Thief"
+    ],
+    "affectiveStatus": "Agility",
+    "mpCost": 0,
+    "skillType": 0,
+    "targetType": 0,
+    "attackType": 0,
+    "skillParams": [
+      30
+    ],
+    "getClassLevel": 1
+  },
+  {
+    "skillID": "double_attack",
+    "name": "더블 어택",
+    "desc_1": "{0}의 빈틈이 보입니다. {0}에게 치명적인 공격을 한번 더 시도 합니다.",
+    "canGetClass": [
+      "Thief"
+    ],
+    "affectiveStatus": "Agility",
+    "mpCost": 0,
+    "skillType": 0,
+    "targetType": 0,
+    "attackType": 0,
+    "skillParams": [
+      70,
+      150
+    ],
+    "getClassLevel": 5
+  },
+  {
+    "skillID": "charge_arrow",
+    "name": "차지 애로우",
+    "desc_1": "{0}을(를) 밀어냅니다. {1}가 멀어집니다.",
+    "canGetClass": [
+      "Archer"
+    ],
+    "affectiveStatus": "Dexterity",
+    "mpCost": 15,
+    "skillType": 0,
+    "targetType": 0,
+    "attackType": 0,
+    "skillParams": [
+      150,
+      2
+    ],
+    "getClassLevel": 1
+  },
+  {
+    "skillID": "arrow_shower",
+    "name": "애로우 샤워",
+    "desc_1": null,
+    "canGetClass": [
+      "Archer"
+    ],
+    "affectiveStatus": "Dexterity",
+    "mpCost": 20,
+    "skillType": 0,
+    "targetType": 1,
+    "attackType": 0,
+    "skillParams": [
+      150
+    ],
+    "getClassLevel": 5
+  }
+]
