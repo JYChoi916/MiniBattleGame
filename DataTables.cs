@@ -234,6 +234,7 @@ public static class DataTables
 
     public static void LoadTables()
     {
+        // 모든 테이블을 비운다.
         ClearTables();
 
         classTable = LoadTable<List<ClassData>>(tableFiles[0]);
@@ -248,49 +249,61 @@ public static class DataTables
 
         monsterTable = LoadTable<List<MonsterData>>(tableFiles[1]);
         monsterTable?.ForEach(x => { monsterDic.Add(x.monsterID, x); });
+        Console.Write("       "); Thread.Sleep(20);
 
         monsterPartyTable = LoadTable<List<MonsterPartyData>>(tableFiles[2]);
         monsterPartyTable?.ForEach(x => { monsterPartyDic.Add(x.partyID, x); });
+        Console.Write("     "); Thread.Sleep(20);
 
         dungeonTable = LoadTable<List<DungeonData>>(tableFiles[3]);
         dungeonTable?.ForEach(x => { dungeonDic.Add(x.dungeonID, x); });
+        Console.Write("    "); Thread.Sleep(20);
 
         expTable = LoadTable<List<ExpData>>(tableFiles[4]);
         expTable?.ForEach(x => { expDic.Add(x.expID, x); });
+        Console.Write("    "); Thread.Sleep(20);
 
         skillTable = LoadTable<List<SkillData>>(tableFiles[5]);
         skillTable?.ForEach(x => { skillDic.Add(x.skillID, x); });
+        Console.Write("    "); Thread.Sleep(20);
 
         itemTable = LoadTable<List<ItemData>>(tableFiles[6]);
+        Console.Write("    "); Thread.Sleep(20);
 
         consumableTable = LoadTable<List<ConsumableItemData>>(tableFiles[7]);
         consumableTable?.ForEach(x => { consumableDic.Add(x.itemID, x); });
+        Console.Write("     "); Thread.Sleep(20);
 
         weaponTable = LoadTable<List<WeaponData>>(tableFiles[8]);
         weaponTable?.ForEach(x => { weaponDic.Add(x.itemID, x); });
+        Console.WriteLine("     "); Thread.Sleep(20);
+        Console.ResetColor();
 
-        Console.WriteLine("테이블 데이터 로드 완료 ............");
+        Console.WriteLine("================== 테이블 로드 완료! ==================");
     }
 
     private static void ClearTables()
     {
-        classTable.Clear();
-        classDic.Clear();
-        monsterTable.Clear();
-        monsterDic.Clear();
-        monsterPartyTable.Clear();
-        monsterPartyDic.Clear();
-        dungeonTable.Clear();
-        dungeonDic.Clear();
-        expTable.Clear();
-        expDic.Clear();
-        skillTable.Clear();
-        skillDic.Clear();
-        itemTable.Clear();
-        consumableTable.Clear();
-        consumableDic.Clear();
-        weaponTable.Clear();
-        weaponDic.Clear();
+        Console.WriteLine("================ 테이블을 초기화 합니다 ===============");
+        Console.BackgroundColor = ConsoleColor.DarkGray;
+
+        classTable.Clear(); Console.Write(" ");
+        classDic.Clear(); Console.Write(" ");
+        monsterTable.Clear(); Console.Write(" ");
+        monsterDic.Clear(); Console.Write(" ");
+        monsterPartyTable.Clear(); Console.Write(" ");
+        monsterPartyDic.Clear(); Console.Write(" ");
+        dungeonTable.Clear(); Console.Write(" ");
+        dungeonDic.Clear(); Console.Write(" ");
+        expTable.Clear(); Console.Write(" ");
+        expDic.Clear(); Console.Write(" ");
+        skillTable.Clear(); Console.Write(" ");
+        skillDic.Clear(); Console.Write(" ");
+        itemTable.Clear(); Console.Write(" ");
+        consumableTable.Clear(); Console.Write(" ");
+        consumableDic.Clear(); Console.Write(" ");
+        weaponTable.Clear(); Console.Write(" ");
+        weaponDic.Clear(); Console.Write(" ");
     }
 
     private static T LoadTable<T>(string filename)
