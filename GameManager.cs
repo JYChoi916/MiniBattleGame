@@ -79,6 +79,7 @@ public class GameManager
         {
             case GameState.Town:
                 {
+                    currentGameState = state;
                     EnterTown();
                     break;
                 }
@@ -86,6 +87,7 @@ public class GameManager
                 {
                     if (currentGameState != state)
                     {
+                        currentGameState = state;
                         EnterDungeon();
                     }
                     else
@@ -97,11 +99,10 @@ public class GameManager
                 }
             case GameState.Quit:
                 {
+                    currentGameState = state;
                     return false;
                 }
         }
-
-        currentGameState = state;
 
         return true;
     }
