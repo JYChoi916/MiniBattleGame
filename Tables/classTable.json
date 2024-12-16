@@ -2,6 +2,8 @@
   {
     "classID": "Novice",
     "name": "모험가",
+    "baseHP": 100,
+    "baseMP": 40,
     "levelUpID": 0,
     "upStr": 1,
     "upInt": 1,
@@ -13,6 +15,8 @@
   {
     "classID": "SwordMan",
     "name": "검사",
+    "baseHP": 200,
+    "baseMP": 60,
     "levelUpID": 1,
     "upStr": 2,
     "upInt": 1,
@@ -24,6 +28,8 @@
   {
     "classID": "Magician",
     "name": "마술사",
+    "baseHP": 150,
+    "baseMP": 80,
     "levelUpID": 1,
     "upStr": 1,
     "upInt": 3,
@@ -35,6 +41,8 @@
   {
     "classID": "Acolyte",
     "name": "견습신부",
+    "baseHP": 180,
+    "baseMP": 70,
     "levelUpID": 1,
     "upStr": 1,
     "upInt": 2,
@@ -46,6 +54,8 @@
   {
     "classID": "Thief",
     "name": "도둑",
+    "baseHP": 200,
+    "baseMP": 60,
     "levelUpID": 1,
     "upStr": 1,
     "upInt": 1,
@@ -57,6 +67,8 @@
   {
     "classID": "Archer",
     "name": "궁수",
+    "baseHP": 180,
+    "baseMP": 70,
     "levelUpID": 1,
     "upStr": 1,
     "upInt": 1,

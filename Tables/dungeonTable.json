@@ -1,13 +1,14 @@
 [
   {
     "dungeonID": "dg_00",
+    "clearCondition": null,
     "name": "마물의 숲",
     "minRoomCount": 3,
     "maxRoomCount": 4,
     "normalPartyIDList": [
-      "m_party_0",
-      "m_party_1",
-      "m_party_2"
+      "m_party_00",
+      "m_party_01",
+      "m_party_02"
     ],
     "bossPartyIDList": [
       "m_party_3"
@@ -15,14 +16,15 @@
   },
   {
     "dungeonID": "dg_01",
+    "clearCondition": "dg_00",
     "name": "고블린 둥지",
     "minRoomCount": 4,
     "maxRoomCount": 5,
     "normalPartyIDList": [
-      "m_party_4",
-      "m_party_5",
-      "m_party_6",
-      "m_party_7"
+      "m_party_04",
+      "m_party_05",
+      "m_party_06",
+      "m_party_07"
     ],
     "bossPartyIDList": [
       "m_party_8",
@@ -32,6 +34,7 @@
   },
   {
     "dungeonID": "dg_02",
+    "clearCondition": "dg_01",
     "name": "악마의 소굴",
     "minRoomCount": 2,
     "maxRoomCount": 2,
