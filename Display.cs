@@ -168,8 +168,13 @@ public static class Display
 
     public static void PrintTimeGage(int currentGage, int maxGage, string characterName, ConsoleColor gageColor)
     {
+        string name = characterName;
+        int fullChCount = Utility.GetFullCharCount(characterName);
+        name = name.PadLeft(10 - fullChCount);
+        //for (int i = characterName.Length; i < 10 - (characterName.Length + fullChCount * 2); ++i)
+        //    name += ' ';
         Console.ResetColor();
-        Console.Write($"{characterName} : [");
+        Console.Write($"{name} : [");
         for (int i = 0; i < maxGage; ++i)
         {
             Console.BackgroundColor = i < currentGage ? gageColor : ConsoleColor.Gray;

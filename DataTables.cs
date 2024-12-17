@@ -89,7 +89,7 @@ public class ExpData
 {
     public string? expID { get; set; }              // 레벨업 필요 경험치 데이터 ID
     public int maxLevel { get; set; }           // 최대 레벨
-    public int firstLevelUpExt { get; set; }    // 1레벨 기준 필요 경험치
+    public int firstLevelUpEXP { get; set; }    // 1레벨 기준 필요 경험치
     public int coefficient { get; set; }        // 레벨이 오를때마다 계산하는 증가 계수
 }
 

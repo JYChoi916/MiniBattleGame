@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Reflection.Emit;
 public enum GameStartType
 {
     New = 1,
@@ -171,7 +172,14 @@ public class GameManager
                     // 이미 던전 모드였을 경우는 배틀 로직을 실행
                     else
                     {
-                        Battle();
+                        if (player.IsDead == false)
+                        {
+                            Battle();
+                        }
+                        else
+                        {
+                            nextGameState = GameState.Town;
+                        }
                     }
                     break;
                 }
@@ -309,5 +317,24 @@ public class GameManager
     {
         // 게임의 상태를 제어하는 SetState의 결과만을 호출한다.
         return SetState(nextGameState);
+    }
+
+    public static int CalculateDamage(Weapon weapon, CharacterStatus status, int level)
+    {
+        int firstDamageStat = status.strength;
+        int secontDamageStat = status.dexterity;
+        int damage = firstDamageStat + (int)(secontDamageStat * 0.5f) + (int)(status.luck * 0.333f) + (int)(level * 0.25f) * 2;
+
+        return damage;
+    }
+
+    public static int CalculateAttackHit(CharacterStatus attakerStat, int attakerLevel, CharacterStatus targetStat)
+    {
+        int atkRatio = 80;
+        int atkRatioCorrection = (attakerStat.dexterity + attakerLevel) - (targetStat.agility);
+        atkRatio += atkRatioCorrection;
+        atkRatio = Math.Clamp(atkRatio, atkRatio, 95);
+
+        return atkRatio;
     }
 }
