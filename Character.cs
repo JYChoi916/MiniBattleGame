@@ -1,11 +1,12 @@
-﻿using System.Xml.Linq;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
-interface IAttackable
+public interface IAttackable
 {
     public void Attack(Character targetCharacter);
 }
 
-interface IDamagable
+public interface IDamagable
 {
     public void GetDamage(int damage);
 }
@@ -23,6 +24,7 @@ public class CharacterStatus
 public class Character
 {
     protected CharacterStatus status;
+    public CharacterStatus Status { get { return status; } }
     protected int currentHP;
     protected int maxHP;
     protected int currentMP;
@@ -32,6 +34,7 @@ public class Character
     protected int def;
     protected int mdef;
     protected bool isDead;
+    public bool IsDead { get { return isDead; } }
 
     public Character()
     {
@@ -43,7 +46,9 @@ public class Character
 public class Player : Character, IAttackable, IDamagable
 {
     string name;
+    public string Name { get { return name; } }
     ClassType classType;
+    public ClassType ClassType { get { return classType; } }
 
     int level;
     int exp;
@@ -112,26 +117,34 @@ public class Player : Character, IAttackable, IDamagable
     {
     }
 
-    void IAttackable.Attack(Character targetCharacter)
+    public void Attack(Character targetCharacter)
     {
         
     }
 
-    void IDamagable.GetDamage(int damage)
+    public void GetDamage(int damage)
     {
         
+    }
+
+    public void ActiveTurn(List<Monster> monsters)
+    {
+        Console.WriteLine($"{name}의 턴입니다!!");
+        Console.WriteLine("지금은 아무키나 누르세요");
+        Console.ReadKey();
     }
 }
 
 public struct Reward
 {
-    public int itemId;
+    public List<int> itemId;
     public int gold;
     public int exp;
 }
 
 public class Monster : Character, IAttackable, IDamagable
 {
+    [Required]
     MonsterData data;
     public MonsterData Data { get { return data; } }
 
@@ -150,15 +163,6 @@ public class Monster : Character, IAttackable, IDamagable
         currentMP = maxMP;
     }
 
-    void IAttackable.Attack(Character targetCharacter)
-    {
-        
-    }
-
-    void IDamagable.GetDamage(int damage)
-    {
-        
-    }
 
     public string[] GetMonsterInfos()
     {
@@ -179,9 +183,40 @@ public class Monster : Character, IAttackable, IDamagable
         return monsterInfos;
     }
 
-    //public Reward Die ()
-    //{
-    //    Reward reward;
-    //    return reward;
-    //}
+    public Reward Die()
+    {
+        Reward reward;
+        reward.exp = data.deathExp;
+        reward.gold = Utility.GetRandom(data.minGold, data.maxGold);
+        reward.itemId = new List<int>();
+        for(int i = 0; i < data?.itemDropRates?.Count; ++i)
+        {
+            int dice = Utility.GetRandom(0, 100);
+            if (dice <= data.itemDropRates[i])
+            {
+                reward.itemId.Add(data.itemDropList[i]);
+            }
+        }
+
+        isDead = true;
+
+        return reward;
+    }
+
+    public void ActiveTurn(Player player)
+    {
+        Console.WriteLine($"{data.name}의 턴입니다!!");
+        Console.WriteLine("지금은 아무키나 누르세요");
+        Console.ReadKey();
+    }
+
+    public void Attack(Character targetCharacter)
+    {
+        
+    }
+
+    public void GetDamage(int damage)
+    {
+        
+    }
 }

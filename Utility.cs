@@ -35,8 +35,6 @@ public static class Utility
         return (new string(ch));
     }
 
-
-
     public static string Half2Full(string sHalf)
     {
         char[] ch = sHalf.ToCharArray(0, sHalf.Length);

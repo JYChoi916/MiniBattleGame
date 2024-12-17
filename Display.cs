@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using System.Xml.Linq;
 
 public static class Display
@@ -6,25 +7,29 @@ public static class Display
     public static int SelectInput(string titleString, string[] menuStrings)
     {
         Console.ResetColor();
-        string selectStringLine = String.Format("┃");
+        List<string> selectStringLines = new List<string>();
         for (int i = 0; i < menuStrings.Length; ++i)
         {
-            selectStringLine = String.Format($"{selectStringLine}   {menuStrings[i]}");
+            string line = String.Format($"┃   {menuStrings[i]}");
+            line = String.Format($"{line}   ┃");
+            selectStringLines.Add(line);
         }
-        selectStringLine = String.Format($"{selectStringLine}   ┃");
-        int fullCharCount = Utility.GetFullCharCount(selectStringLine);
+        int fullCharCount = Utility.GetFullCharCount(selectStringLines[0]);
         Console.WriteLine(titleString);
         string lineString = "┏";
-        int lineLength = selectStringLine.Length + fullCharCount - 4;
+        int lineLength = selectStringLines[0].Length + fullCharCount - 4;
         for (int i = 0; i < lineLength; ++i)
             lineString += "━";
         lineString += "┓";
 
         Console.WriteLine(lineString);
-        Console.WriteLine(selectStringLine);
+        for (int i = 0; i < selectStringLines.Count; ++i)
+        {
+            Console.WriteLine(selectStringLines[i]);
+        }
 
         lineString = "┗";
-        for (int i = 0; i < selectStringLine.Length + fullCharCount - 4; ++i)
+        for (int i = 0; i < selectStringLines[0].Length + fullCharCount - 4; ++i)
             lineString += "━";
         lineString += "┛";
 
@@ -47,12 +52,32 @@ public static class Display
             else
             {
                 selectNumber = consoleKeyInfo.KeyChar - '0';
+                if (selectNumber > menuStrings.Length)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine();
+                    Console.WriteLine("!!선택 할수 없는 번호를 입력하셨습니다!!");
+                    Console.ResetColor();
+                    continue;
+                }
+
                 Console.WriteLine();
                 break;
             }
         }
 
         return selectNumber;
+    }
+
+    public static int SelectYesOrNo()
+    {
+        string[] selectString =
+{
+            "1.   예  ",
+            "2. 아니오"
+            };
+        int select = SelectInput("", selectString);
+        return select;
     }
 
     public static void PlayerInfo(Player player, bool isDetailInfo)
@@ -93,6 +118,9 @@ public static class Display
     public static void MonstersInfo(List<Monster> monsters)
     {
         List<string>monstersInfo = new List<string>();
+
+        Console.WriteLine();
+
         for(int i = 0; i < monsters.Count; ++i)
         {
             string[] infos = monsters[i].GetMonsterInfos();
@@ -104,6 +132,16 @@ public static class Display
         for (int i = 0; i < monstersInfo[0].Length + fullCharCount - 4; ++i)
             lineString += "━";
         lineString += "━━┓";
+
+        string space = "";
+        for (int i = 0; i < monstersInfo[0].Length / 2 + 2; ++i) space += " ";
+
+        string titleString = "몬스터 정보";
+        titleString = titleString.Insert(0, space);
+        titleString = titleString.Insert(titleString.Length, space);
+
+        Console.WriteLine(titleString);
+
         Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine(lineString);
         for (int i = 0; i < monstersInfo.Count; ++i)
@@ -120,5 +158,24 @@ public static class Display
         lineString += "━━┛";
         Console.WriteLine(lineString);
         Console.ResetColor();
+    }
+
+    public static void RepeatLastLine(string line)
+    {
+        Console.SetCursorPosition(0, Console.CursorTop - 1);
+        Console.WriteLine(line);
+    }
+
+    public static void PrintTimeGage(int currentGage, int maxGage, string characterName, ConsoleColor gageColor)
+    {
+        Console.ResetColor();
+        Console.Write($"{characterName} : [");
+        for (int i = 0; i < maxGage; ++i)
+        {
+            Console.BackgroundColor = i < currentGage ? gageColor : ConsoleColor.Gray;
+            Console.Write(" ");
+        }
+        Console.ResetColor();
+        Console.WriteLine("]");
     }
 }
