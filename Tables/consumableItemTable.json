@@ -2,7 +2,6 @@
   {
     "itemID": "small_potion",
     "usable": true,
-    "itemTarget": "Player",
     "itemParams": [
       50
     ]
@@ -10,7 +9,6 @@
   {
     "itemID": "middle_potion",
     "usable": true,
-    "itemTarget": "Player",
     "itemParams": [
       100
     ]
@@ -18,7 +16,6 @@
   {
     "itemID": "large_potion",
     "usable": true,
-    "itemTarget": "Player",
     "itemParams": [
       200
     ]
@@ -26,7 +23,6 @@
   {
     "itemID": "mp_potion",
     "usable": true,
-    "itemTarget": "Player",
     "itemParams": [
       -1,
       50
@@ -35,7 +31,6 @@
   {
     "itemID": "slime_gel",
     "usable": false,
-    "itemTarget": "NonUsable",
     "itemParams": [
       -1
     ]
@@ -43,7 +38,6 @@
   {
     "itemID": "goblin_tooth",
     "usable": false,
-    "itemTarget": "NonUsable",
     "itemParams": [
       -1
     ]
@@ -51,7 +45,6 @@
   {
     "itemID": "orc_nail",
     "usable": false,
-    "itemTarget": "NonUsable",
     "itemParams": [
       -1
     ]
@@ -59,7 +52,6 @@
   {
     "itemID": "skeleton_bone",
     "usable": false,
-    "itemTarget": "NonUsable",
     "itemParams": [
       -1
     ]
@@ -67,18 +59,8 @@
   {
     "itemID": "goblin_horn",
     "usable": false,
-    "itemTarget": "NonUsable",
     "itemParams": [
       -1
-    ]
-  },
-  {
-    "itemID": "bomb",
-    "usable": true,
-    "itemTarget": "Enemy",
-    "itemParams": [
-      100,
-      50
     ]
   }
 ]

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
 
@@ -9,10 +10,15 @@ public class Dungeon
 {
     Player player;
 	DungeonData dungeonData;
+    public string DungeonID { get { return dungeonData.dungeonID; } }
 	List<DungeonRoom> rooms;
 	string name;
 	int currentRoomNumber;
     DungeonRoom currentRoom;
+    bool isCleared;
+    public bool IsCleared { get { return isCleared; } }
+
+
 
     // 턴 계산을 하기 위한 카운터
     float playerTimeCounter;
@@ -24,7 +30,6 @@ public class Dungeon
         List<Monster> monsters;
         Dictionary<string, Monster> monsterDic;
         public List<Monster> Monsters { get { return monsters; } }
-
         public DungeonRoom(List<MonsterPartyData> partyDataList)
         {
             this.partyDataList = partyDataList;
@@ -39,6 +44,9 @@ public class Dungeon
                 if (monster.IsDead == false)
                     return false;
             }
+
+            Console.WriteLine();
+            Console.WriteLine("방의 모든 몬스터를 처치했습니다.");
             return true;
         }
 
@@ -76,6 +84,7 @@ public class Dungeon
 
     public void Enter()
 	{
+        isCleared = false;
 		Console.Clear();
 		// 주사위를 굴려 던전 데이터의 최소/최대 사이 방의 수를 결정
 		int roomCount = Utility.GetRandom(dungeonData.minRoomCount, dungeonData.maxRoomCount+1);
@@ -112,6 +121,22 @@ public class Dungeon
 		currentRoomNumber++;
 		if (currentRoomNumber < rooms.Count)
 		{
+            if (currentRoomNumber < rooms.Count - 1)
+            {
+                if (currentRoomNumber > 0)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"키를 눌러{currentRoomNumber + 1}번째 방으로 진입합니다.");
+
+                    Console.ReadKey();
+                }
+            }
+            else
+            {
+                Console.WriteLine();
+                Console.WriteLine("키를 눌러 마지막 방으로 진입합니다.");
+                Console.WriteLine("조심하세요 강력한 몬스터가 등장합니다.");
+            }
             rooms[currentRoomNumber].Enter();
             currentRoom = rooms[currentRoomNumber];
             playerTimeCounter = 0;
@@ -173,7 +198,9 @@ public class Dungeon
                 // 이미 죽었을때에는 턴 카운팅 할 필요X
                 else
                 {
-                    Console.WriteLine($"{monster.Data.name} : X DEAD X");
+                    int fullChCount = Utility.GetFullCharCount(monster.monsterUniqueName);
+                    string monsterName = monster.monsterUniqueName.PadLeft(10 - fullChCount);
+                    Console.WriteLine($"{monsterName} : X DEAD X");
                     monstersTimeCounter[i] = 0;
                 }
             }
@@ -201,6 +228,10 @@ public class Dungeon
 
                     // 플레이어에게 보상 전달
                     player.GetReward(reward);
+                    Console.WriteLine();
+                    Console.WriteLine($"키를 눌러 진행합니다....");
+                    Console.ReadKey();
+
                     anyStatusHasChanged = true;
                     continue;
                 }
@@ -228,11 +259,23 @@ public class Dungeon
 
     void DungeonClear()
 	{
+        Console.WriteLine();
+        Console.WriteLine($"{name}을 클리어 하였습니다 축하드립니다.");
+        Reward reward = GenerateDungeonReward();
+        player.GetReward(reward);
+        Console.WriteLine();
+        Console.WriteLine($"키를 눌러 마을로 돌아갑니다....");
+        Console.ReadKey();
+        isCleared = true;
+    }
 
-	}
+    public Reward GenerateDungeonReward()
+    {
+        Reward reward = new Reward();
+        reward.exp = 0;
+        reward.gold = 1000;
+        reward.items = new List<int>();
 
-	//public Reward GetReward()
-	//{
-
-	//}
+        return reward;
+    }
 }

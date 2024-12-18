@@ -44,6 +44,17 @@ public class Character
     virtual public string GetName() { return ""; }
 
     virtual public void GetDamage(int damage) { }
+
+    public void RecoverHP(int recoverPoint)
+    {
+        currentHP += recoverPoint;
+        currentHP = currentHP > maxHP ? maxHP : currentHP;
+    }
+    public void RecoverMP(int recoverPoint)
+    {
+        currentMP += recoverPoint;
+        currentMP = currentMP > maxMP ? maxMP : currentMP;
+    }
 }
 
 public class Player : Character, IAttackable
@@ -59,11 +70,21 @@ public class Player : Character, IAttackable
     int level;
     int exp;
     int nextExp;
+    int gold;
+    public int Gold { get { return gold; } }
+    Inventory inventory;
+    public Inventory Inventory { get { return inventory; } }
 
-    public Player(string name, ClassType classType) : base()
+    public Player(string name) : base()
     {
         this.name = name;
-        SetClass(classType);
+        gold = 0;
+        inventory = new Inventory(20);
+    }
+
+    public void GetGold(int gold)
+    {
+        this.gold += gold;
     }
 
     public string[] GetPlayerInfoString()
@@ -72,6 +93,8 @@ public class Player : Character, IAttackable
         {
             $"이  름 : {name}",
             $"직  업 : {classType.ToString()}",
+            $"레  벨 : {level}",
+            $"경험치 : {exp}/{nextExp}",
             $"Ｈ  Ｐ : {currentHP}/{maxHP}",
             $"Ｍ  Ｐ : {currentMP}/{maxMP}",
             $"ＳＴＲ : {status.strength}",
@@ -80,6 +103,7 @@ public class Player : Character, IAttackable
             $"ＤＥＸ : {status.dexterity}",
             $"ＡＧＩ : {status.agility}",
             $"ＬＵＫ : {status.luck}",
+            $"소지금 : {gold}",
         };
         return playersInfo;
     }
@@ -122,10 +146,6 @@ public class Player : Character, IAttackable
         // 습득 할 수 있는 스킬 체크 후 습득
     }
 
-    public void RecoverAll()
-    {
-    }
-
     public void Attack(Character targetCharacter)
     {
         int damage = GameManager.CalculateDamage(null, status, level);
@@ -140,10 +160,11 @@ public class Player : Character, IAttackable
         else
         {
             int atkRatio = GameManager.CalculateAttackHit(status, level, targetCharacter.Status);
+            Console.WriteLine();
+            Console.WriteLine($"{name}의 공격!!!");
             dice = Utility.GetRandom(0, 100);
             if (dice <= atkRatio)
             {
-                Console.WriteLine($"{name}의 공격!!!");
                 targetCharacter.GetDamage(damage);
             }
             else
@@ -156,12 +177,14 @@ public class Player : Character, IAttackable
 
     public override void GetDamage(int damage)
     {
+        int dmg = damage - status.vitality;
+        Console.WriteLine();
         Console.Write($"{name}의 ");
         Console.ForegroundColor = ConsoleColor.DarkRed;
-        Console.Write($"{damage}");
+        Console.Write($"{dmg}");
         Console.ResetColor();
         Console.WriteLine("데미지 !!!!!");
-        currentHP -= damage - status.vitality;
+        currentHP -= dmg;
         if(currentHP < 0)
         {
             isDead = true;
@@ -180,6 +203,7 @@ public class Player : Character, IAttackable
 
     public void ActiveTurn(List<Monster> monsters)
     {
+        Console.WriteLine();
         Console.WriteLine($"{name}의 턴입니다!!");
         // 스킬 사용 및 일반 공격 선택 
 
@@ -188,8 +212,13 @@ public class Player : Character, IAttackable
         // 일반 공격
         int targetMonsterIndex = SeletectTargetIndex(monsters);
         Attack(monsters[targetMonsterIndex]);
+        Console.WriteLine();
         Console.WriteLine("키를 눌러 턴을 종료하세요");
-        Console.ReadKey();
+        ConsoleKeyInfo cki = Console.ReadKey();
+        if (cki.Key == ConsoleKey.C)
+        {
+            monsters.ForEach(m => m.Die());
+        }
     }
 
     public int SeletectTargetIndex(List<Monster> monsters)
@@ -200,25 +229,89 @@ public class Player : Character, IAttackable
         {
             targetMonsterNames.Add($"{i+1}. {monsters[i].monsterUniqueName}");
         }
-
+        Console.WriteLine();
         return Display.SelectInput("공격할 대상을 선택하세요", targetMonsterNames.ToArray()) - 1;
     }
 
     public void GetReward(Reward reward)
     {
-        exp += reward.exp;
-        if(exp >= nextExp)
+        if (reward.exp > 0)
         {
-            LevelUp();
+            exp += reward.exp;
+            Console.Write("경험치를 "); Console.ForegroundColor = ConsoleColor.DarkYellow; Console.Write(reward.exp); Console.ResetColor(); Console.WriteLine(" 얻었습니다.");
+            ClassData classData = DataTables.GetClassData(classType);
+            ExpType expType = (ExpType)classData.levelUpID;
+            ExpData expData = DataTables.GetExpData(expType.ToString());
+            if (exp >= nextExp && level < expData.maxLevel)
+            {
+                Console.ForegroundColor = ConsoleColor.Green; Console.Write(level + 1); Console.ResetColor(); Console.WriteLine(" 레벨이 되었습니다 !!!!");
+                Console.Write("힘이     "); Console.ForegroundColor = ConsoleColor.DarkYellow; Console.Write(classData.upStr); Console.ResetColor(); Console.WriteLine("증가하였습니다.");
+                Console.Write("지능이   "); Console.ForegroundColor = ConsoleColor.DarkYellow; Console.Write(classData.upInt); Console.ResetColor(); Console.WriteLine("증가하였습니다.");
+                Console.Write("체력이   "); Console.ForegroundColor = ConsoleColor.DarkYellow; Console.Write(classData.upVit); Console.ResetColor(); Console.WriteLine("증가하였습니다.");
+                Console.Write("솜씨가   "); Console.ForegroundColor = ConsoleColor.DarkYellow; Console.Write(classData.upDex); Console.ResetColor(); Console.WriteLine("증가하였습니다.");
+                Console.Write("민첩이   "); Console.ForegroundColor = ConsoleColor.DarkYellow; Console.Write(classData.upAgi); Console.ResetColor(); Console.WriteLine("증가하였습니다.");
+                Console.Write("운이     "); Console.ForegroundColor = ConsoleColor.DarkYellow; Console.Write(classData.upLuk); Console.ResetColor(); Console.WriteLine("증가하였습니다.");
+                LevelUp();
+            }
         }
 
-        // 골드와 아이템은 인벤토리 구현 이후 추가
+        if (reward.gold > 0)
+        {
+            gold += reward.gold;
+            Console.ForegroundColor = ConsoleColor.DarkYellow; Console.Write($"{reward.gold} "); Console.ResetColor(); Console.WriteLine("골드를 얻었습니다.");
+        }
+
+        if (reward.items.Count >0)
+        {
+            foreach (var itemId in reward.items) {
+                ItemData data = DataTables.GetItemData(itemId);
+                if (data != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow; Console.Write($"{data.name} ");
+                    Console.WriteLine("발견!!");
+                    while (inventory.AddItem(data, 1) == false)
+                    {
+                        Console.WriteLine("가방에 빈 공간이 없습니다. 소지품을 비우시겠습니까?");
+                        int select = Display.SelectYesOrNo();
+                        if (select == 1)
+                        {
+                            while (true)
+                            {
+                                var itemSlot = inventory.ShowAndSelectInventory();
+                                if (itemSlot != null)
+                                {
+                                    string itemCountString = itemSlot.currentStack > 1 ? $" x {itemSlot.currentStack}" : "";
+                                    Console.WriteLine();
+                                    Console.WriteLine($"{itemSlot.Name}{itemCountString} - 이 자리를 비우시겠습니까?");
+                                    select = Display.SelectYesOrNo();
+                                    if (select == 1)
+                                    {
+                                        itemSlot.RemoveItem();
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                }
+                                else break;                                
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine("아이템을 포기합니다.");
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
 public class Reward
 {
-    public List<int> itemId;
+    public List<int> items;
     public int gold;
     public int exp;
 }
@@ -274,16 +367,18 @@ public class Monster : Character, IAttackable
     public Reward Die()
     {
         isDead = true;
+        Console.WriteLine();
+        Console.WriteLine($"=>{monsterUniqueName}의 죽음!!!");
         Reward reward = new Reward();
         reward.exp = data.deathExp;
         reward.gold = Utility.GetRandom(data.minGold, data.maxGold);
-        reward.itemId = new List<int>();
+        reward.items = new List<int>();
         for (int i = 0; i < data?.itemDropRates?.Count; ++i)
         {
             int dice = Utility.GetRandom(0, 100);
             if (dice <= data.itemDropRates[i])
             {
-                reward.itemId.Add(data.itemDropList[i]);
+                reward.items.Add(data.itemDropList[i]);
             }
         }
         return reward;
@@ -291,7 +386,8 @@ public class Monster : Character, IAttackable
 
     public void ActiveTurn(Player player)
     {
-        Console.WriteLine($"{data.name}의 턴입니다!!");
+        Console.WriteLine();
+        Console.WriteLine($"{monsterUniqueName}의 턴입니다!!");
 
         int maxDice = 100;
         int skillIndex = -1;
@@ -323,12 +419,13 @@ public class Monster : Character, IAttackable
 
     public void Attack(Character targetCharacter)
     {
-        int damage = GameManager.CalculateDamage(null, status, 0);
-
+        int damage = GameManager.CalculateDamage(null, status, 1);
+        Console.WriteLine();
         int atkRatio = GameManager.CalculateAttackHit(status, 0, targetCharacter.Status);
         int dice = Utility.GetRandom(0, 100);
         if (dice <= atkRatio)
         {
+            Console.WriteLine($"{monsterUniqueName}의 공격 !!!");
             targetCharacter.GetDamage(damage);
         }
         else
@@ -340,12 +437,14 @@ public class Monster : Character, IAttackable
 
     public override void GetDamage(int damage)
     {
+        int dmg = damage - status.vitality;
+        Console.WriteLine();
         Console.Write($" => {monsterUniqueName}의 ");
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.Write($" {damage} ");
+        Console.Write($" {dmg} ");
         Console.ResetColor();
         Console.WriteLine("데미지 !!!!!");
-        currentHP -= damage - status.vitality;
+        currentHP -= dmg;
         if (currentHP <= 0)
         {
             currentHP = 0;

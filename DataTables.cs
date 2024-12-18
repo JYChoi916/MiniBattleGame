@@ -47,6 +47,15 @@ public enum CosumableItemTargetType
     Enemy
 }
 
+public enum ItemUseType
+{
+    None,
+    RecoverHP,
+    RecoverMP,
+    Damage,
+    AreaDamage,
+}
+
 public enum DamageAffectionType
 {
     Physical,
@@ -59,7 +68,8 @@ public enum ItemType
     Consumable,
     KeyItem,
     Weapon,
-    Armor
+    Armor,
+    Shield,
 }
 
 public enum ItemAttackType
@@ -181,6 +191,7 @@ public class ConsumableItemData
     public string? itemID { get; set; }                      // 아이템 ID
     public bool usable { get; set; }                        // 사용가능 여부
     public CosumableItemTargetType itemTarget { get; set; } // 아이템 사용 대상 
+    public ItemUseType useType { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public List<int>? itemParams { get; set; }                     // 아이템 사용 관련 수치 리스트
@@ -197,6 +208,16 @@ public class WeaponData
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public List<int>? equipableClasses { get; set; }     // 착용가능한 직업 목록
+}
+
+public class ShieldData
+{
+
+}
+
+public class ArmorData
+{
+
 }
 
 

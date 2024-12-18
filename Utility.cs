@@ -47,4 +47,27 @@ public static class Utility
         }
         return (new string(ch));
     }
+
+    public static void MakeSameLengthStrings(List<string> strings)
+    {
+        int longestLength = strings.Max(s => s.Length);
+        string longestString = strings.FirstOrDefault(s => s.Length == longestLength);
+
+        int fullCharCount = GetFullCharCount(longestString);
+        for (int i = 0; i < strings.Count; ++i)
+        {
+            var info = strings[i];
+            if (info.Length < longestLength)
+            {
+                int diff = longestLength - info.Length;
+                int fc = GetFullCharCount(info);
+                int fcDiff = fullCharCount - fc;
+                for (int j = 0; j <  + diff + (fcDiff); ++j)
+                {
+                    info += " ";
+                }
+                strings[i] = info;
+            }
+        }
+    }
 }

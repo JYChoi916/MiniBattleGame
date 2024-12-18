@@ -60,11 +60,16 @@ public class GameManager
             int select = Display.SelectYesOrNo();
             if (select == 1)
             {
-                player = new Player(playerName, ClassType.Novice);
+                player = new Player(playerName);
+                player.SetClass(ClassType.Novice);
+                player.GetGold(500);
+                player.Inventory.SetTestInventory();
                 SelectInitialStat();
                 IntroMessage();
                 break;
             }
+            // Test Inventory
+
             Console.WriteLine();
         }
 
@@ -89,7 +94,7 @@ public class GameManager
             {  5,  5,  5,  5,  5,  5 },
             {  9,  2,  8,  5,  4,  2 },
             {  3, 10,  4,  4,  3,  2 },
-            {  4,  1,  3,  5,  9,  8 },
+            { 10,  1,  3,  5,  9,  8 },
             {  3,  5,  3,  9,  4,  6 },
         };
 
@@ -172,12 +177,15 @@ public class GameManager
                     // 이미 던전 모드였을 경우는 배틀 로직을 실행
                     else
                     {
-                        if (player.IsDead == false)
+                        if (player.IsDead == false && currentDungeon.IsCleared == false)
                         {
                             Battle();
                         }
                         else
                         {
+                            if (currentDungeon.IsCleared)
+                                clearDungeonList.Add(currentDungeon.DungeonID);
+
                             nextGameState = GameState.Town;
                         }
                     }
@@ -255,10 +263,23 @@ public class GameManager
         {
             dungeonSelectMenuString.Add($"{i+1}. {enabledDungeonData[i].name}");
         }
-        int selectedDungeonIndex = Display.SelectInput(dungeonSelectTitle, dungeonSelectMenuString.ToArray());
-        DungeonData dungeonData = enabledDungeonData[selectedDungeonIndex-1];
+        dungeonSelectMenuString.Add($"0. 마을로 돌아가기");
 
-        PrepareDungeon(dungeonData);
+        Utility.MakeSameLengthStrings(dungeonSelectMenuString);
+        
+        int selectedDungeonIndex = Display.SelectInput(dungeonSelectTitle, dungeonSelectMenuString.ToArray(), true);
+        if (selectedDungeonIndex > 0)
+        {
+            DungeonData dungeonData = enabledDungeonData[selectedDungeonIndex - 1];
+            PrepareDungeon(dungeonData);
+        }
+        else
+        {
+            Console.WriteLine();
+            Console.WriteLine("키를 눌러 마을로 돌아갑니다.");
+            Console.ReadKey();
+            EnterTown();
+        }
     }
 
     void EnterShop()
@@ -281,9 +302,38 @@ public class GameManager
 
     void OpenInventory()
     {
-        Console.Clear();
-        Console.WriteLine("인벤토리는 구현 중입니다.");
-        Console.WriteLine("아무키나 누르시면 마을로 돌아갑니다.");
+        while (true)
+        {
+            Console.Clear();
+            ItemSlot selectSlot = player.Inventory.ShowAndSelectInventory();
+            if (selectSlot == null)
+                break;
+
+            if (selectSlot != null)
+            {
+                if (selectSlot.IsUsable())
+                {
+                    Console.WriteLine($"{selectSlot.Name}, 사용하시겠습니까?");
+                    int select = Display.SelectYesOrNo();
+                    if (select == 1)
+                    {
+                        var cData = DataTables.GetConsumeItemData(selectSlot.GetItemData().itemID);
+                        if (cData.itemTarget == CosumableItemTargetType.Player)
+                        {
+                            var targets = new List<Character>();
+                            targets.Add(player);
+                            selectSlot.UseItem(targets);
+                        }
+                        else
+                        {
+                            Console.WriteLine("마을에서는 사용할 수 없습니다.");
+                            Console.ReadKey();
+                        }
+                    }
+                }
+            }
+        }
+        Console.WriteLine("마을로 돌아갑니다.");
         Console.ReadKey();
         nextGameState = GameState.Town;
     }
@@ -318,7 +368,7 @@ public class GameManager
         // 게임의 상태를 제어하는 SetState의 결과만을 호출한다.
         return SetState(nextGameState);
     }
-
+    
     public static int CalculateDamage(Weapon weapon, CharacterStatus status, int level)
     {
         int firstDamageStat = status.strength;
