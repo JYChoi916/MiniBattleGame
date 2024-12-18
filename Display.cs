@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 public static class Display
 {
-    public static int SelectInput(string titleString, string[] menuStrings, bool hasZero = false)
+    public static int SelectInput(string titleString, string[] menuStrings, bool hasZero = false, bool isLineInput = false)
     {
         Console.ResetColor();
         List<string> selectStringLines = new List<string>();
@@ -37,33 +37,62 @@ public static class Display
 
         int selectNumber = -1;
         ConsoleKeyInfo consoleKeyInfo;
+        string inputLine = "";
         while (true)
         {
             Console.Write("선택하세요 : ");
-            consoleKeyInfo = Console.ReadKey();
 
-            if (consoleKeyInfo.KeyChar < 49 + (hasZero ? -1 : 0) || consoleKeyInfo.KeyChar > 57)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine();
-                Console.WriteLine("!!!!잘못 입력했습니다!!!!");
-                Console.ResetColor();
-            }
-            else
-            {
-                selectNumber = consoleKeyInfo.KeyChar - '0';
-                if (selectNumber > menuStrings.Length)
+            if (isLineInput == false)
+            { 
+                consoleKeyInfo = Console.ReadKey();
+
+                if (consoleKeyInfo.KeyChar < 49 + (hasZero ? -1 : 0) || consoleKeyInfo.KeyChar > 57)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine();
-                    Console.WriteLine("!!선택 할수 없는 번호를 입력하셨습니다!!");
+                    Console.WriteLine("!!!!잘못 입력했습니다!!!!");
                     Console.ResetColor();
                     continue;
                 }
-
-                Console.WriteLine();
-                break;
+                else
+                {
+                    selectNumber = consoleKeyInfo.KeyChar - '0';
+                    if (selectNumber > menuStrings.Length)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine();
+                        Console.WriteLine("!!선택 할수 없는 번호를 입력하셨습니다!!");
+                        Console.ResetColor();
+                        continue;
+                    }
+                }
             }
+            else
+            {
+                inputLine = Console.ReadLine();
+                if(int.TryParse(inputLine, out selectNumber))
+                {
+                    if (selectNumber > menuStrings.Length)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine();
+                        Console.WriteLine("!!선택 할수 없는 번호를 입력하셨습니다!!");
+                        Console.ResetColor();
+                        continue;
+                    }
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine();
+                    Console.WriteLine("!!!!잘못 입력했습니다!!!!");
+                    Console.ResetColor();
+                    continue;
+                }
+            }
+
+            Console.WriteLine();
+            break;
         }
 
         return selectNumber;

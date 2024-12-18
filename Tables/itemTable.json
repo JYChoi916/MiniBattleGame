@@ -36,7 +36,7 @@
     "name": "목검",
     "itemID": "wood_sword",
     "type": "Weapon",
-    "maxStack": 2,
+    "maxStack": 1,
     "price": 150
   },
   {
@@ -44,7 +44,7 @@
     "name": "숏소드",
     "itemID": "short_sword",
     "type": "Weapon",
-    "maxStack": 2,
+    "maxStack": 1,
     "price": 250
   },
   {
@@ -52,7 +52,7 @@
     "name": "롱소드",
     "itemID": "long_sword",
     "type": "Weapon",
-    "maxStack": 2,
+    "maxStack": 1,
     "price": 500
   },
   {
@@ -60,7 +60,7 @@
     "name": "양손검",
     "itemID": "twohanded_sword",
     "type": "Weapon",
-    "maxStack": 2,
+    "maxStack": 1,
     "price": 1000
   },
   {
@@ -68,7 +68,7 @@
     "name": "완드",
     "itemID": "wand",
     "type": "Weapon",
-    "maxStack": 2,
+    "maxStack": 1,
     "price": 250
   },
   {
@@ -76,7 +76,7 @@
     "name": "스태프",
     "itemID": "staff",
     "type": "Weapon",
-    "maxStack": 2,
+    "maxStack": 1,
     "price": 500
   },
   {
@@ -84,7 +84,7 @@
     "name": "메이스",
     "itemID": "mace",
     "type": "Weapon",
-    "maxStack": 2,
+    "maxStack": 1,
     "price": 250
   },
   {
@@ -92,7 +92,7 @@
     "name": "클럽",
     "itemID": "club",
     "type": "Weapon",
-    "maxStack": 2,
+    "maxStack": 1,
     "price": 500
   },
   {
@@ -100,7 +100,7 @@
     "name": "나이프",
     "itemID": "knife",
     "type": "Weapon",
-    "maxStack": 2,
+    "maxStack": 1,
     "price": 250
   },
   {
@@ -108,7 +108,7 @@
     "name": "대거",
     "itemID": "dagger",
     "type": "Weapon",
-    "maxStack": 2,
+    "maxStack": 1,
     "price": 500
   },
   {
@@ -116,7 +116,7 @@
     "name": "숏보우",
     "itemID": "short_bow",
     "type": "Weapon",
-    "maxStack": 2,
+    "maxStack": 1,
     "price": 250
   },
   {
@@ -124,7 +124,7 @@
     "name": "롱보우",
     "itemID": "long_bow",
     "type": "Weapon",
-    "maxStack": 2,
+    "maxStack": 1,
     "price": 500
   },
   {
@@ -132,7 +132,7 @@
     "name": "바제랄드",
     "itemID": "vadzerald",
     "type": "Weapon",
-    "maxStack": 2,
+    "maxStack": 1,
     "price": 5000
   },
   {

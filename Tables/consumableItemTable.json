@@ -2,6 +2,8 @@
   {
     "itemID": "small_potion",
     "usable": true,
+    "itemTarget": "Player",
+    "useType": "RecoverHP",
     "itemParams": [
       50
     ]
@@ -9,6 +11,8 @@
   {
     "itemID": "middle_potion",
     "usable": true,
+    "itemTarget": "Player",
+    "useType": "RecoverHP",
     "itemParams": [
       100
     ]
@@ -16,6 +20,8 @@
   {
     "itemID": "large_potion",
     "usable": true,
+    "itemTarget": "Player",
+    "useType": "RecoverHP",
     "itemParams": [
       200
     ]
@@ -23,14 +29,17 @@
   {
     "itemID": "mp_potion",
     "usable": true,
+    "itemTarget": "Player",
+    "useType": "RecoverMP",
     "itemParams": [
-      -1,
       50
     ]
   },
   {
     "itemID": "slime_gel",
     "usable": false,
+    "itemTarget": "NonUsable",
+    "useType": "None",
     "itemParams": [
       -1
     ]
@@ -38,6 +47,8 @@
   {
     "itemID": "goblin_tooth",
     "usable": false,
+    "itemTarget": "NonUsable",
+    "useType": "None",
     "itemParams": [
       -1
     ]
@@ -45,6 +56,8 @@
   {
     "itemID": "orc_nail",
     "usable": false,
+    "itemTarget": "NonUsable",
+    "useType": "None",
     "itemParams": [
       -1
     ]
@@ -52,6 +65,8 @@
   {
     "itemID": "skeleton_bone",
     "usable": false,
+    "itemTarget": "NonUsable",
+    "useType": "None",
     "itemParams": [
       -1
     ]
@@ -59,8 +74,20 @@
   {
     "itemID": "goblin_horn",
     "usable": false,
+    "itemTarget": "NonUsable",
+    "useType": "None",
     "itemParams": [
       -1
+    ]
+  },
+  {
+    "itemID": "bomb",
+    "usable": true,
+    "itemTarget": "Enemy",
+    "useType": "AreaDamage",
+    "itemParams": [
+      100,
+      50
     ]
   }
 ]

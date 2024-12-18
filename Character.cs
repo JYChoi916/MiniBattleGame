@@ -45,13 +45,24 @@ public class Character
 
     virtual public void GetDamage(int damage) { }
 
-    public void RecoverHP(int recoverPoint)
+    virtual public void RecoverHP(int recoverPoint)
     {
+        
+        Console.Write($"{GetName()}, ");
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write($"{recoverPoint} ");
+        Console.ResetColor();
+        Console.WriteLine($" HP 회복 !!!!!");
         currentHP += recoverPoint;
         currentHP = currentHP > maxHP ? maxHP : currentHP;
     }
-    public void RecoverMP(int recoverPoint)
+    virtual public void RecoverMP(int recoverPoint)
     {
+        Console.Write($"{GetName()}, ");
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.Write($"{recoverPoint} ");
+        Console.ResetColor();
+        Console.WriteLine($" HP 회복 !!!!!");
         currentMP += recoverPoint;
         currentMP = currentMP > maxMP ? maxMP : currentMP;
     }

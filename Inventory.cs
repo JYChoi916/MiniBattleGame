@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 public class ItemSlot
 {
@@ -42,13 +43,17 @@ public class ItemSlot
 	}
 
 	// 호출 되었다는건 이미 소비할 수 있는 아이템이라는 판단 후
-	public void UseItem(List<Character> targets)
+	public void UseItem(Player player, List<Character> targets)
 	{
         ConsumableItemData cData = DataTables.GetConsumeItemData(itemData.itemID);
         UsableItem item = new UsableItem(cData);
 
 		foreach (var target in targets)
 		{
+			string str = $"{player.GetName()}, ";
+			str += player == target ? "자신" : $"{target.GetName()}";
+
+            Console.WriteLine($"{str}에게 {itemData.name} 사용!!");
 			item.Use(target, cData.itemParams);
         }
 
@@ -150,29 +155,34 @@ public class Inventory
 		}
     }
 
-	public void UseItem(int slotIndex, List<Character> targets)
-	{
-		if(itemSlots[slotIndex].IsUsable())
-		{
-			itemSlots[slotIndex].UseItem(targets);
-        }
-	}
-
 	public ItemSlot ShowAndSelectInventory()
 	{
 		List<string> itemSlotStrings = new List<string>();
-		for(int i = 0; i < itemSlots.Count; ++i)
+		string slotString = "";
+
+        for (int i = 0; i < itemSlots.Count; ++i)
 		{
-			string slotString = $"{i+1}. ";
-			slotString += itemSlots[i].IsEmpty ? "---- 비어있음 ----" : itemSlots[i].Name;
-			itemSlotStrings.Add(slotString);
+			slotString += $"{i+1,2}. ";
+
+            int length = 15 - Encoding.Default.GetBytes(itemSlots[i].Name).Length;
+			length = Math.Clamp(length, 0, 15);
+            slotString += itemSlots[i].IsEmpty ? "---- 비어있음 ----" : "".PadLeft(length) + $"{itemSlots[i].Name}" + $" x{itemSlots[i].currentStack,2}";
+
+			int j = i + 1;
+			if (j % 4 == 0)
+			{
+				itemSlotStrings.Add(slotString);
+				slotString = "";
+            }
+			else
+				slotString += "    ";
         }
 
-		itemSlotStrings.Add("0. 돌아가기");
+        itemSlotStrings.Add(" 0. 돌아가기");
+		Utility.MakeSameLengthStrings(itemSlotStrings);
 
 		Console.WriteLine();
-		Console.WriteLine("버릴 아이템을 선택해주세요");
-        int selectedSlotIndex = Display.SelectInput("---------- 인벤토리 ---------", itemSlotStrings.ToArray(), true);
+        int selectedSlotIndex = Display.SelectInput("---------- 인벤토리 ---------", itemSlotStrings.ToArray(), true, true);
 		if (selectedSlotIndex <= 0)
 		{
 			return null;

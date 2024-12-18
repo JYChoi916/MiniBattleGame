@@ -322,7 +322,8 @@ public class GameManager
                         {
                             var targets = new List<Character>();
                             targets.Add(player);
-                            selectSlot.UseItem(targets);
+                            selectSlot.UseItem(player, targets);
+                            Console.ReadKey();
                         }
                         else
                         {
@@ -330,6 +331,12 @@ public class GameManager
                             Console.ReadKey();
                         }
                     }
+                }
+                else
+                {
+                    Console.WriteLine($"{selectSlot.Name} : 이 아이템은 사용 할 수 없는 아이템 입니다.");
+                    Console.WriteLine($"다른 아이템을 선택해주세요");
+                    Console.ReadKey();
                 }
             }
         }

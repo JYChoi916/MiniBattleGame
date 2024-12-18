@@ -4,7 +4,7 @@
     "name": "슬라임",
     "hp": 20,
     "mp": 0,
-    "strength": 5,
+    "strength": 6,
     "intelligence": 1,
     "vitality": 2,
     "dexterity": 1,
@@ -27,7 +27,7 @@
   {
     "monsterID": "mon_01_02",
     "name": "고블린",
-    "hp": 50,
+    "hp": 40,
     "mp": 0,
     "strength": 7,
     "intelligence": 1,
@@ -180,8 +180,7 @@
     "minGold": 500,
     "maxGold": 800,
     "usingSkillIDList": [
-      "fatal_blow",
-      "bash"
+      "fatal_blow"
     ],
     "skillRatioList": [
       10
