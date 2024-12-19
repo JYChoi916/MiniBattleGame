@@ -145,7 +145,8 @@ public class Dungeon
             currentRoom = rooms[currentRoomNumber];
             playerTimeCounter = 0;
             monstersTimeCounter.Clear();
-            currentRoom.Monsters.ForEach(x => monstersTimeCounter.Add(0f));
+
+            currentRoom.Monsters.ForEach(x => monstersTimeCounter.Add((float)Utility.GetRandom(0, 10)));
         }
 		else
 		{
@@ -187,6 +188,8 @@ public class Dungeon
             playerTimeCounter += 1.0f + player.Status.agility * 0.1f;           // 민첩성 수치의 10%를 게이지 추가에 반영
             timeGageCount = (int)(playerTimeCounter / 20.0f);
             Display.PrintTimeGage(timeGageCount, 20, player.GetName(), ConsoleColor.Green);
+
+            Console.WriteLine();
 
             // Monsters Time Gage
             for(int i = 0; i < currentRoom.Monsters.Count; ++i)
@@ -260,7 +263,7 @@ public class Dungeon
             if (anyStatusHasChanged)
                 break;
 
-            Console.SetCursorPosition(0, Console.CursorTop - (1 + currentRoom.Monsters.Count));
+            Console.SetCursorPosition(0, Console.CursorTop - (2 + currentRoom.Monsters.Count));
         }
     }
 

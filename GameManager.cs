@@ -3,6 +3,8 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography.X509Certificates;
+using System.Transactions;
+using System.Windows.Markup;
 public enum GameStartType
 {
     New = 1,
@@ -84,12 +86,13 @@ public class GameManager
                 player.SetName(playerName);
                 player.SetClass(ClassType.Novice);
                 player.GetGold(500);
-                player.Inventory.SetTestInventory();
+                var slot = player.Inventory.AddItem(DataTables.GetItemData(4), 1);
+                player.Equip(slot, false);
+                player.Inventory.SetTestInventory(); // Test Inventory
                 SelectInitialStat();
                 IntroMessage();
                 break;
             }
-            // Test Inventory
 
             Console.WriteLine();
         }
@@ -236,7 +239,8 @@ public class GameManager
             "2. 상       점",
             "3. 여       관",
             "4. 인 벤 토 리",
-            "5. 게 임 종 료"
+            "5. 장 비 착 용",
+            "6. 게 임 종 료"
         };
         int selectedMenu = Display.SelectInput(townIntroString, townMenuString, 5);
         switch(selectedMenu)
@@ -254,6 +258,9 @@ public class GameManager
                 OpenInventory();
                 break;
             case 5:
+                OpenEquipment();
+                break;
+            case 6:
                 EnterQuitMenu();
                 break;
         }
@@ -326,7 +333,7 @@ public class GameManager
         {
             Console.Clear();
 
-            ItemSlot selectSlot = player.Inventory.ShowAndSelectInventory();
+            ItemSlot selectSlot = player.Inventory.ShowAndSelectInventory(ItemCategory.All);
             if (selectSlot == null)
                 break;
 
@@ -377,6 +384,15 @@ public class GameManager
         Console.WriteLine("마을로 돌아갑니다.");
         Console.ReadKey();
         nextGameState = GameState.Town;
+    }
+
+    public void OpenEquipment()
+    {
+        while (true)
+        {
+            Console.Clear();
+
+        }
     }
 
     void EnterQuitMenu()

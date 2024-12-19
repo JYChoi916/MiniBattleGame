@@ -72,6 +72,13 @@ public enum ItemType
     Shield,
 }
 
+public enum ItemCategory
+{
+    Usable,
+    Equipable,
+    All,
+}
+
 public enum ItemAttackType
 {
     Melee,
@@ -212,12 +219,12 @@ public class WeaponData
 
 public class ShieldData
 {
-
+    public string? itemID { get; set; }                  // 방패 ID
 }
 
 public class ArmorData
 {
-
+    public string? itemID { get; set; }                  // 갑옷 ID
 }
 
 
@@ -264,6 +271,7 @@ public static class DataTables
 
     private static List<ItemData> itemTable = new List<ItemData>();
     public static List<ItemData> ItemTable { get { return itemTable; } }
+    private static Dictionary<string, ItemData> itemDic = new Dictionary<string, ItemData>();
 
     private static List<ConsumableItemData> consumableTable = new List<ConsumableItemData>();
     public static List<ConsumableItemData> ConsumableTable { get { return consumableTable; } }
@@ -309,6 +317,7 @@ public static class DataTables
         Console.Write("    "); Thread.Sleep(20);
 
         itemTable = LoadTable<List<ItemData>>(tableFiles[6]);
+        itemTable?.ForEach(x=> { itemDic.Add(x.itemID, x); });
         Console.Write("    "); Thread.Sleep(20);
 
         consumableTable = LoadTable<List<ConsumableItemData>>(tableFiles[7]);
@@ -320,12 +329,12 @@ public static class DataTables
         Console.WriteLine("     "); Thread.Sleep(20);
         Console.ResetColor();
 
-        Console.WriteLine("================== 테이블 로드 완료! ==================");
+        Console.WriteLine("================== 테이블 로드 완료! ===================");
     }
 
     private static void ClearTables()
     {
-        Console.WriteLine("================ 테이블을 초기화 합니다 ===============");
+        Console.WriteLine("================= 테이블을 초기화 합니다 ===============");
         Console.BackgroundColor = ConsoleColor.DarkGray;
 
         classTable.Clear(); Console.Write(" ");
@@ -341,6 +350,7 @@ public static class DataTables
         skillTable.Clear(); Console.Write(" ");
         skillDic.Clear(); Console.Write(" ");
         itemTable.Clear(); Console.Write(" ");
+        itemDic.Clear(); Console.Write(" ");
         consumableTable.Clear(); Console.Write(" ");
         consumableDic.Clear(); Console.Write(" ");
         weaponTable.Clear(); Console.Write(" ");
@@ -408,6 +418,11 @@ public static class DataTables
     public static ItemData GetItemData(int index)
     {
         return itemTable[index];
+    }
+
+    public static ItemData GetItemData(string id)
+    {
+        return itemDic[id];
     }
 
     public static ConsumableItemData GetConsumeItemData(string id)

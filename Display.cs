@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using System.Xml.Linq;
+using ConsoleTables;
 
 public static class Display
 {
@@ -33,7 +34,7 @@ public static class Display
             lineString += "━";
         lineString += "┛";
 
-        Console.WriteLine($"{lineString, 10}");
+        Console.WriteLine(lineString);
 
         int selectNumber = -1;
         ConsoleKeyInfo consoleKeyInfo;

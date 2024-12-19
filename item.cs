@@ -14,16 +14,24 @@ public class Weapon
 	{
 		this.data = data;
 	}
+
+	public string ItemID { get { return data != null ? data.itemID : null; } }
+	public WeaponData GetWeaponData() { return data; }
 }
 
 public class Shield
 {
 	ShieldData data;
+    public string ItemID { get { return data != null ? data.itemID : null; } }
+    public ShieldData GetWeaponData() { return data; }
 }
 
 public class Armor
 {
 	ArmorData data;
+
+    public string ItemID { get { return data != null ? data.itemID : null; } }
+    public ArmorData GetWeaponData() { return data; }
 }
 
 public class UsableItem

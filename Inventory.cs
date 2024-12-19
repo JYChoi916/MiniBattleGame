@@ -141,7 +141,7 @@ public class Inventory
 
 	public void SetTestInventory()
 	{
-		for (int i = 0; i < itemSlots.Count; i++) {
+        for (int i = 0; i < itemSlots.Count; i++) {
 			if (i < itemSlots.Count - 1) {
 				var itemData = DataTables.GetItemData(Utility.GetRandom(4, 17));
 				itemSlots[i].AddItem(itemData, 1);
@@ -154,7 +154,7 @@ public class Inventory
 		}
 	}
 
-    public bool AddItem(ItemData data, int count)
+    public ItemSlot AddItem(ItemData data, int count)
 	{
 		ItemSlot slot = null;
 
@@ -178,34 +178,39 @@ public class Inventory
 		// 스택을 쌓을 수 있거나 빈 슬롯이 있다면
 		if (slot != null)
 		{
-            Console.ForegroundColor = ConsoleColor.Yellow; Console.Write($"{data.name} "); Console.ResetColor(); Console.WriteLine("획득!!!");
+			Console.Write("인벤토리에 "); Console.ForegroundColor = ConsoleColor.Yellow; Console.Write($"{data.name} "); Console.ResetColor(); Console.WriteLine("추가.");
             // 아이템 추가
             slot.AddItem(data, count);
-			return true;
+			return slot;
 		}
 		// 없다면
 		else
 		{
 			// 아이템 추가 실패
-			return false;
+			return null;
 		}
     }
 
-	public ItemSlot ShowAndSelectInventory(bool onlyUsable = false)
+	public ItemSlot ShowAndSelectInventory(ItemCategory category)
 	{
 		List<string> itemSlotStrings = new List<string>();
 		string slotString = "";
-		List<ItemSlot> usableSlots = new List<ItemSlot>();
+		List<ItemSlot> categorySlots = new List<ItemSlot>();
 		int number = 1;
         for (int i = 0; i < itemSlots.Count; ++i)
 		{
-			if (onlyUsable)
+			if (category == ItemCategory.Equipable)
 			{
-				if (itemSlots[i].IsEmpty || itemSlots[i].IsUsable() == false)
+				if (itemSlots[i].IsEmpty || itemSlots[i].IsEquptable())
 					continue;
-			}
+            }
+			else if (category == ItemCategory.Usable)
+			{
+                if (itemSlots[i].IsEmpty || itemSlots[i].IsUsable() == false)
+                    continue;
+            }
 
-			slotString += $"{number,2}. ";
+            slotString += $"{number,2}. ";
 
 			string itemInfo = $"{itemSlots[i].Name}" + $" x {itemSlots[i].currentStack}";
 
@@ -214,8 +219,7 @@ public class Inventory
 			itemSlotStrings.Add(slotString);
 			slotString = "";
 
-			if (onlyUsable)
-				usableSlots.Add(itemSlots[i]);
+			categorySlots.Add(itemSlots[i]);
 
             number++;
         }
@@ -223,7 +227,7 @@ public class Inventory
         itemSlotStrings.Add(" 0. 돌아가기");
 		Utility.MakeSameLengthStrings(itemSlotStrings);
 
-		var itemSlotList = onlyUsable ? usableSlots : itemSlots;
+		var itemSlotList = category != ItemCategory.All ? categorySlots : itemSlots;
 
         Console.WriteLine();
         int selectedSlotIndex = Display.SelectInput("---------- 인벤토리 ---------", itemSlotStrings.ToArray(), itemSlotList.Count, true, true);
@@ -233,7 +237,20 @@ public class Inventory
 		}
 		else
 		{
-			return onlyUsable ? itemSlotList[selectedSlotIndex - 1] : itemSlots[selectedSlotIndex - 1];
+			return category != ItemCategory.All ? itemSlotList[selectedSlotIndex - 1] : itemSlots[selectedSlotIndex - 1];
         }
 	}
+
+	public void ShowEquipmensInvetory(Equipment equipments)
+	{
+		List<string> equipmentsStrings = new List<string>();
+		string itemname = DataTables.GetItemData(equipments.weapon.ItemID).name;
+		equipmentsStrings.Add($"무기 : {itemname}");
+        itemname = DataTables.GetItemData(equipments.shield.ItemID).name;
+        equipmentsStrings.Add($"방패 : {itemname}");
+        itemname = DataTables.GetItemData(equipments.armor.ItemID).name;
+        equipmentsStrings.Add($"갑옷 : {itemname}");
+
+
+    }
 }

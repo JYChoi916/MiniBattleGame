@@ -1,7 +1,4 @@
-﻿using System.ComponentModel;
-using System.Reflection;
-
-namespace MiniBattleGame
+﻿namespace MiniBattleGame
 {
     internal class Program
     {
