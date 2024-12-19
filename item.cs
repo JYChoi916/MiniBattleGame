@@ -1,37 +1,104 @@
 ﻿using System;
 
-public class Equipment
+public class Equipments
 {
-	public Weapon weapon;
-	public Shield shield;
-	public Armor armor;
+    List<EquipmentSlot> equiptedItems = new List<EquipmentSlot>();
+
+    public Equipments()
+    {
+        for (int i = 0; i < 3; ++i)
+            equiptedItems.Add(new EquipmentSlot());
+    }
+
+    public EquipmentSlot GetEquipmentSlot(EquipmentType type)
+    {
+        return equiptedItems[(int)type];
+    }
+
+    public string GetEquiptedItemName(EquipmentType type)
+    {
+        if (equiptedItems[(int)type].equipedItem == null)
+            return "-- 미착용 --";
+
+        return equiptedItems[(int)type].equipedItem.data.name;
+    }
+
+    public void EquipItem(ItemSlot slot, EquipmentType type)
+    {
+        var eSlot = equiptedItems[(int)type];
+        if (eSlot.equipedItem == null)
+        {
+            EquipmentItem item = null;
+            switch (type)
+            {
+                case EquipmentType.Weapon:
+                    item = new WeaponItem(slot.GetItemData());
+                    break;
+                case EquipmentType.Armor:
+                    item = new ArmorItem(slot.GetItemData());
+                    break;
+                case EquipmentType.Shield:
+                    item = new ShieldItem(slot.GetItemData());
+                    break;
+            }
+            eSlot.equipedItem = item;
+        }
+        else
+        {
+            var data = eSlot.equipedItem.data;
+            eSlot.equipedItem.data = slot.GetItemData();
+            slot.RemoveItem();
+            slot.AddItem(data, 1);
+        }
+    }
 }
 
-public class Weapon
+public class EquipmentSlot
 {
-	WeaponData data;
-    public Weapon(WeaponData data)
+    public EquipmentItem equipedItem;
+    public EquipmentSlot()
+    {
+        equipedItem = null;
+    }
+}
+
+public class EquipmentItem
+{
+    public ItemData data;
+	public EquipmentItem(ItemData data)
 	{
 		this.data = data;
 	}
-
-	public string ItemID { get { return data != null ? data.itemID : null; } }
-	public WeaponData GetWeaponData() { return data; }
+    public ItemData GetData()
+    {
+        return data;
+    }
 }
 
-public class Shield
+public class WeaponItem : EquipmentItem
 {
-	ShieldData data;
-    public string ItemID { get { return data != null ? data.itemID : null; } }
-    public ShieldData GetWeaponData() { return data; }
+    public WeaponItem(ItemData data) : base(data)
+    {
+    }
+
+    public WeaponData GetWeaponData()
+    {
+        return DataTables.GetWeaponData(data.itemID);
+    }
 }
 
-public class Armor
+public class ShieldItem : EquipmentItem
 {
-	ArmorData data;
+    public ShieldItem(ItemData data) : base(data)
+    {
+    }
+}
 
-    public string ItemID { get { return data != null ? data.itemID : null; } }
-    public ArmorData GetWeaponData() { return data; }
+public class ArmorItem : EquipmentItem
+{
+    public ArmorItem(ItemData data) : base(data)
+    {
+    }
 }
 
 public class UsableItem

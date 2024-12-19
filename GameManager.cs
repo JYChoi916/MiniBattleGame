@@ -86,7 +86,7 @@ public class GameManager
                 player.SetName(playerName);
                 player.SetClass(ClassType.Novice);
                 player.GetGold(500);
-                var slot = player.Inventory.AddItem(DataTables.GetItemData(4), 1);
+                var slot = player.Inventory.AddItem(DataTables.GetItemData(4), 1, false);
                 player.Equip(slot, false);
                 player.Inventory.SetTestInventory(); // Test Inventory
                 SelectInitialStat();
@@ -242,7 +242,7 @@ public class GameManager
             "5. 장 비 착 용",
             "6. 게 임 종 료"
         };
-        int selectedMenu = Display.SelectInput(townIntroString, townMenuString, 5);
+        int selectedMenu = Display.SelectInput(townIntroString, townMenuString, townMenuString.Length);
         switch(selectedMenu)
         {
             case 1:
@@ -333,7 +333,7 @@ public class GameManager
         {
             Console.Clear();
 
-            ItemSlot selectSlot = player.Inventory.ShowAndSelectInventory(ItemCategory.All);
+            ItemSlot selectSlot = player.Inventory.ShowAndSelectInventory(ItemType.All);
             if (selectSlot == null)
                 break;
 
@@ -391,7 +391,38 @@ public class GameManager
         while (true)
         {
             Console.Clear();
+            Display.PlayerInfo(player, true);
 
+            int equipParts = player.Inventory.ShowEquipmens(player.Equips);
+            if (equipParts < 0)
+            {
+                nextGameState = GameState.Town;
+                break;
+            }
+
+            List<string> menuString = new List<string>();
+            menuString.Add("1. 착용하기");
+            menuString.Add("2. 해제하기");
+            menuString.Add("0. 취    소");
+            int selectedMenu = Display.SelectInput("", menuString.ToArray(), menuString.Count, true);
+            if (selectedMenu == 0)
+            {
+                continue;
+            }
+
+            if (selectedMenu == 1)
+            {
+                ItemSlot slot = player.Inventory.ShowAndSelectInventory((ItemType)(equipParts));
+                if (slot != null)
+                {
+                    player.Equip(slot, true);
+                    continue;
+                }
+            }
+            else
+            {
+                player.UnEquipItem((EquipmentType)(equipParts));
+            }
         }
     }
 
@@ -426,12 +457,40 @@ public class GameManager
         return SetState(nextGameState);
     }
     
-    public static int CalculateDamage(Weapon weapon, CharacterStatus status, int level)
+    public static int CalculateDamage(WeaponData weaponData, CharacterStatus status, int level)
+    {
+        int baseWeaponDamage = CaclulateWeaponDamage(weaponData, status);
+
+        int sign = Utility.GetRandom(-1, 2);
+        int randomAtk = (int)(baseWeaponDamage * 0.05f * sign);
+        baseWeaponDamage += randomAtk;
+        int damage = baseWeaponDamage + CalculateStatusDamage(weaponData, status, level);
+        if (weaponData != null)
+            damage = (int)(damage * (1 + (weaponData.percentATK * 0.01f))) ;
+
+        return damage;
+    }
+
+    public static int CaclulateWeaponDamage(WeaponData weaponData, CharacterStatus status)
+    {
+        if (weaponData == null) return 0;
+
+        int firstDamageStat = status.strength;
+        if (weaponData.attackType == ItemAttackType.Range) firstDamageStat = status.dexterity;
+        int secondDamageStat = status.dexterity;
+        if (weaponData.attackType == ItemAttackType.Range) secondDamageStat = status.strength;
+        int baseWeaponDamage = (int)(weaponData.plusATK * ((firstDamageStat + 200.0f) * 0.005f));
+        return baseWeaponDamage;
+    }
+
+    public static int CalculateStatusDamage(WeaponData weaponData, CharacterStatus status, int level)
     {
         int firstDamageStat = status.strength;
-        int secontDamageStat = status.dexterity;
-        int damage = firstDamageStat + (int)(secontDamageStat * 0.5f) + (int)(status.luck * 0.333f) + (int)(level * 0.25f) * 2;
+        if (weaponData != null && weaponData.attackType == ItemAttackType.Range) firstDamageStat = status.dexterity;
+        int secondDamageStat = status.dexterity;
+        if (weaponData != null && weaponData.attackType == ItemAttackType.Range) firstDamageStat = status.strength;
 
+        int damage = firstDamageStat + (int)(secondDamageStat * 0.5f) + (int)(status.luck * 0.333f) + (int)(level * 0.25f) * 2;
         return damage;
     }
 

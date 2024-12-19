@@ -19,8 +19,8 @@ public class Player : Character, IAttackable
     Inventory inventory;
     public Inventory Inventory { get { return inventory; } }
 
-    Equipment equipments = new Equipment();
-    public Equipment Equipments { get { return equipments; } }
+    Equipments equipments = new Equipments();
+    public Equipments Equips { get { return equipments; } }
 
     public Player() : base()
     {
@@ -35,21 +35,33 @@ public class Player : Character, IAttackable
 
     public string[] GetPlayerInfoString()
     {
+        WeaponData weaponData = null;
+
+        if (equipments.GetEquipmentSlot(EquipmentType.Weapon).equipedItem != null)
+        {
+            var data = equipments.GetEquipmentSlot(EquipmentType.Weapon).equipedItem.GetData();
+            weaponData = DataTables.GetWeaponData(data.itemID);
+        }
+
+        int weaponDamage = weaponDamage = GameManager.CaclulateWeaponDamage(weaponData, status);
+        int statusDamage = GameManager.CalculateStatusDamage(weaponData, status, level);
+
         string[] playersInfo =
         {
-            $"이  름 : {name}",
-            $"직  업 : {classType.ToString()}",
-            $"레  벨 : {level}",
-            $"경험치 : {exp}/{nextExp}",
-            $"Ｈ  Ｐ : {currentHP}/{maxHP}",
-            $"Ｍ  Ｐ : {currentMP}/{maxMP}",
-            $"ＳＴＲ : {status.strength}",
-            $"ＩＮＴ : {status.intelligence}",
-            $"ＶＩＴ : {status.vitality}",
-            $"ＤＥＸ : {status.dexterity}",
-            $"ＡＧＩ : {status.agility}",
-            $"ＬＵＫ : {status.luck}",
-            $"소지금 : {gold}",
+            $"NAME : {name}",
+            $"CLASS : {classType.ToString()}",
+            $"LEVEL : {level}",
+            $"EXP : {exp}/{nextExp}",
+            $"HP : {currentHP}/{maxHP}",
+            $"MP : {currentMP}/{maxMP}",
+            $"STR : {status.strength}",
+            $"INT : {status.intelligence}",
+            $"VIT : {status.vitality}",
+            $"DEX : {status.dexterity}",
+            $"AGI : {status.agility}",
+            $"LUK : {status.luck}",
+            $"ATK : {weaponDamage}+{statusDamage}",
+            $"GOLD : {gold}"
         };
         return playersInfo;
     }
@@ -98,13 +110,25 @@ public class Player : Character, IAttackable
 
     public void Attack(Character targetCharacter)
     {
-        int damage = GameManager.CalculateDamage(null, status, level);
+        WeaponData weaponData = null;
+        int weaponCritical = 0;
+        if (equipments.GetEquipmentSlot(EquipmentType.Weapon).equipedItem != null)
+        {
+            var data = equipments.GetEquipmentSlot(EquipmentType.Weapon).equipedItem.GetData();
+            weaponData = DataTables.GetWeaponData(data.itemID);
+            weaponCritical = weaponData.criticalRatio;
+        }
+
+        int damage = GameManager.CalculateDamage(weaponData, status, level);
 
         // 무기를 들었을 경우 
         int dice = Utility.GetRandom(0, 100);
-        if (dice <= status.luck + 20)
+        if (dice <= status.luck + 20 + weaponCritical)
         {
-            damage *= 2;
+            Console.WriteLine();
+            Console.WriteLine($"!!{name}의 회심의 일격!!!!!");
+
+            damage = (int)(damage * 1.5f);
             targetCharacter.GetDamage(damage);
         }
         else
@@ -220,7 +244,7 @@ public class Player : Character, IAttackable
         List<Character> targets = new List<Character>();
         while (true)
         {
-            ItemSlot slot = inventory.ShowAndSelectInventory(ItemCategory.Usable);
+            ItemSlot slot = inventory.ShowAndSelectInventory(ItemType.Consumable);
             if (slot != null)
             {
                 ConsumableItemData cData = DataTables.GetConsumeItemData(slot.ItemID);
@@ -260,7 +284,6 @@ public class Player : Character, IAttackable
 
     public int SeletectTargetIndex(List<Character> monsters)
     {
-        List<Monster> targets = new List<Monster>();
         List<string> targetMonsterNames = new List<string>();
         for (int i = 0; i < monsters.Count; i++)
         {
@@ -271,7 +294,7 @@ public class Player : Character, IAttackable
         Utility.MakeSameLengthStrings(targetMonsterNames);
 
         Console.WriteLine();
-        return Display.SelectInput("공격할 대상을 선택하세요", targetMonsterNames.ToArray(), targetMonsterNames.Count, true) - 1;
+        return Display.SelectInput("공격할 대상을 선택하세요", targetMonsterNames.ToArray(), monsters.Count, true) - 1;
     }
 
     public void GetReward(Reward reward)
@@ -327,7 +350,7 @@ public class Player : Character, IAttackable
             {
                 while (true)
                 {
-                    var itemSlot = inventory.ShowAndSelectInventory(ItemCategory.All);
+                    var itemSlot = inventory.ShowAndSelectInventory(ItemType.All);
                     if (itemSlot != null)
                     {
                         string itemCountString = itemSlot.currentStack > 1 ? $" x {itemSlot.currentStack}" : "";
@@ -358,62 +381,32 @@ public class Player : Character, IAttackable
         return true;
     }
 
-    public void Equip(ItemSlot slot, bool showMessage)
+    public bool Equip(ItemSlot slot, bool showMessage)
     {
         ItemData data = slot.GetItemData();
-        if (data != null)
-        {
-            switch(data.type)
-            {
-                case ItemType.Weapon:
-                    EquipWeapon(slot);
-                    break;
-                case ItemType.Armor:
-                    break;
-                case ItemType.Shield:
-                    break;
-                default:
-                    break;
-            }
+        if (data == null)
+            return false;
 
-            if(showMessage)
-            {
-                Console.WriteLine($"{slot.Name} 착용!");
-                Console.WriteLine("키를 눌러서 진행하세요");
-                Console.ReadKey();
-            }
+        equipments.EquipItem(slot, (EquipmentType)data.type);
+
+        if (showMessage)
+        {
+            Console.WriteLine($"{data.name} 착용!");
+            Console.WriteLine("키를 눌러서 진행하세요");
+            Console.ReadKey();
         }
+        return true;
     }
 
-    void EquipWeapon(ItemSlot slot)
+    public bool UnEquipItem(EquipmentType type)
     {
-        ItemData data = slot.GetItemData();
-        WeaponData weaponData = DataTables.GetWeaponData(data.itemID);
-        if (weaponData != null)
+        EquipmentSlot equipmentSlot = equipments.GetEquipmentSlot(type);
+        if(equipmentSlot.equipedItem != null)
         {
-            Weapon weapon = new Weapon(weaponData);
-            if (equipments.weapon != null)
-            {
-                slot.RemoveItem();
-                if (UnEquipWeapon())
-                {
-                    equipments.weapon = weapon;
-                }
-                else
-                {
-                    slot.AddItem(data, 1);
-                }
-            }
-            else
-            {
-                equipments.weapon = weapon;
-            }
+            ItemData itemData = equipmentSlot.equipedItem.data;
+            return AddItemToInventory(itemData, $"{itemData.name}을 해제 할 수 없습니다.");
         }
-    }
-    
-    bool UnEquipWeapon()
-    {
-        ItemData itemData = DataTables.GetItemData(equipments.weapon.ItemID);
-        return AddItemToInventory(itemData, $"{itemData.name}을 해제 할 수 없습니다.");
+
+        return true;
     }
 }

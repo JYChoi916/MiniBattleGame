@@ -5,7 +5,7 @@ using ConsoleTables;
 
 public static class Display
 {
-    public static int SelectInput(string titleString, string[] menuStrings, int maxNumber, bool hasZero = false, bool isLineInput = false)
+    public static int SelectInput(string titleString, string[] menuStrings, int maxNumber, bool hasZero = false, bool isLineInput = false, string inputString = "선택하세요")
     {
         Console.ResetColor();
         List<string> selectStringLines = new List<string>();
@@ -41,7 +41,7 @@ public static class Display
         string inputLine = "";
         while (true)
         {
-            Console.Write("선택하세요 : ");
+            Console.Write($"{inputString} : ");
 
             if (isLineInput == false)
             { 
@@ -113,64 +113,83 @@ public static class Display
     public static void PlayerInfo(Player player, bool isDetailInfo)
     {
         string[] playerInfos = player.GetPlayerInfoString();
-        List<string> infos = new List<string>();
-        string basicInfo = "";
-        if (isDetailInfo == false)
-        {
-            basicInfo = $"  {playerInfos[0]} | {playerInfos[1]} | {playerInfos[2]} | {playerInfos[3]} | {playerInfos[4]} | {playerInfos[5]}  ";
-            infos.Add(basicInfo);
-        }
-        else
-        {
-            // 여기는 다시 만들자
-            infos.Add($"  {playerInfos[0]} | {playerInfos[1]} | {playerInfos[2]} | {playerInfos[3]} | {playerInfos[4]} | {playerInfos[5]}  ");
-            infos.Add($"  {playerInfos[6]} | {playerInfos[7]} | {playerInfos[8]} | {playerInfos[9]} | {playerInfos[10]} | {playerInfos[11]}  ");
-            infos.Add($"  {player.Gold}  ");
-        }
 
-        int longestLength = infos.Max(s => s.Length);
-        string longestString = infos.FirstOrDefault(s => s.Length == longestLength);
+        ConsoleTable consoleTable = new ConsoleTable(playerInfos[0], playerInfos[1]);
+        consoleTable.Rows.Clear();
+        consoleTable.AddRow(playerInfos[2], playerInfos[3]);
+        consoleTable.AddRow("", "");
+        consoleTable.AddRow(playerInfos[4], playerInfos[5]);
+        consoleTable.AddRow("", "");
+        consoleTable.AddRow(playerInfos[6], playerInfos[9]);
+        consoleTable.AddRow(playerInfos[7], playerInfos[10]);
+        consoleTable.AddRow(playerInfos[8], playerInfos[11]);
+        consoleTable.AddRow("", "");
+        consoleTable.AddRow(playerInfos[12], playerInfos[13]);
 
-        int fullCharCount = Utility.GetFullCharCount(longestString);
-        for (int i = 0; i < infos.Count; ++i)
-        {
-            var info = infos[i];
-            if (info.Length < longestLength)
-            {
-                int fc = Utility.GetFullCharCount(info);
-                int fcDiff = fullCharCount - fc;
-                if (fcDiff == 0 && longestLength - info.Length <= 2)
-                    fcDiff += 2;
-                else
-                    fcDiff += fcDiff % 2 == 1 ? 1 : 0;
-                for (int j = 0; j < longestLength - info.Length + fcDiff + 1; ++j)
-                {
-                    info += " ";
-                }
-                infos[i] = info;
-            }
-        }
+        consoleTable.Write(Format.MarkDown);
+        Console.WriteLine();
 
-        string lineString = "┏━━";
-        for (int i = 0; i < longestLength + fullCharCount - 4; ++i)
-            lineString += "━";
-        lineString += "━━┓";
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine(lineString);
-        for(int i = 0; i < infos.Count; ++i)
-        {
-            Console.Write("┃");
-            Console.ResetColor();
-            Console.Write(infos[i]);
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("┃");
-        }
-        lineString = "┗━━";
-        for (int i = 0; i < longestLength + fullCharCount - 4; ++i)
-            lineString += "━";
-        lineString += "━━┛";
-        Console.WriteLine(lineString);
-        Console.ResetColor();
+        ////Utility.MakeSameLengthStrings(playerInfos.ToList());
+        //List<string> infos = new List<string>();
+        //string basicInfo = "";
+        //if (isDetailInfo == false)
+        //{
+        //    basicInfo = $"  {playerInfos[0],15}|{playerInfos[1],15}|{playerInfos[2],15}|{playerInfos[3],15}|{playerInfos[4],15}|{playerInfos[5],15}  ";
+        //    infos.Add(basicInfo);
+        //}
+        //else
+        //{
+        //    // 여기는 다시 만들자
+        //    infos.Add($"  {playerInfos[0],15}|{playerInfos[1],15}|{playerInfos[2],15}|{playerInfos[3],15}|{playerInfos[4],15}|{playerInfos[5],15}  ");
+        //    infos.Add($"  {playerInfos[6],15}|{playerInfos[7],15}|{playerInfos[8],15}|{playerInfos[9],15}|{playerInfos[10],15}|{playerInfos[11],15}  ");
+        //    infos.Add($"  {playerInfos[12],15}|{playerInfos[13],15}");
+        //}
+
+        ////Utility.MakeSameLengthStrings(infos);
+
+        //int longestLength = infos.Max(s => s.Length);
+        //string longestString = infos.FirstOrDefault(s => s.Length == longestLength);
+
+        //int fullCharCount = Utility.GetFullCharCount(longestString);
+        //for (int i = 0; i < infos.Count; ++i)
+        //{
+        //    var info = infos[i];
+        //    if (info.Length < longestLength)
+        //    {
+        //        int fc = Utility.GetFullCharCount(info);
+        //        int fcDiff = fullCharCount - fc;
+        //        if (fcDiff == 0 && longestLength - info.Length <= 2)
+        //            fcDiff += 2;
+        //        else
+        //            fcDiff += fcDiff % 2 == 1 ? 1 : 0;
+        //        for (int j = 0; j < longestLength - info.Length + fcDiff + 1; ++j)
+        //        {
+        //            info += " ";
+        //        }
+        //        infos[i] = info;
+        //    }
+        //}
+
+        //string lineString = "┏━━";
+        //for (int i = 0; i < longestLength + fullCharCount - 4; ++i)
+        //    lineString += "━";
+        //lineString += "━━┓";
+        //Console.ForegroundColor = ConsoleColor.Green;
+        //Console.WriteLine(lineString);
+        //for(int i = 0; i < infos.Count; ++i)
+        //{
+        //    Console.Write("┃");
+        //    Console.ResetColor();
+        //    Console.Write(infos[i]);
+        //    Console.ForegroundColor = ConsoleColor.Green;
+        //    Console.WriteLine("┃");
+        //}
+        //lineString = "┗━━";
+        //for (int i = 0; i < longestLength + fullCharCount - 4; ++i)
+        //    lineString += "━";
+        //lineString += "━━┛";
+        //Console.WriteLine(lineString);
+        //Console.ResetColor();
     }
     public static void MonstersInfo(List<Character> monsters)
     {

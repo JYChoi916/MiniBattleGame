@@ -65,18 +65,19 @@ public enum DamageAffectionType
 
 public enum ItemType
 {
-    Consumable,
-    KeyItem,
     Weapon,
     Armor,
     Shield,
+    Consumable,
+    KeyItem,
+    All,
 }
 
-public enum ItemCategory
+public enum EquipmentType
 {
-    Usable,
-    Equipable,
-    All,
+    Weapon,
+    Armor,
+    Shield,
 }
 
 public enum ItemAttackType
@@ -226,8 +227,6 @@ public class ArmorData
 {
     public string? itemID { get; set; }                  // 갑옷 ID
 }
-
-
 
 public static class DataTables
 {
