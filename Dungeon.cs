@@ -15,6 +15,10 @@ public class Dungeon
 	string name;
 	int currentRoomNumber;
     DungeonRoom currentRoom;
+    public List<Character> GetCurrentMonsters()
+    {
+        return currentRoom.Monsters;
+    }
     bool isCleared;
     public bool IsCleared { get { return isCleared; } }
 
@@ -27,13 +31,13 @@ public class Dungeon
     public class DungeonRoom
     {
         List<MonsterPartyData> partyDataList;
-        List<Monster> monsters;
+        List<Character> monsters;
         Dictionary<string, Monster> monsterDic;
-        public List<Monster> Monsters { get { return monsters; } }
+        public List<Character> Monsters { get { return monsters; } }
         public DungeonRoom(List<MonsterPartyData> partyDataList)
         {
             this.partyDataList = partyDataList;
-            monsters = new List<Monster>();
+            monsters = new List<Character>();
             monsterDic = new Dictionary<string, Monster>();
         }
 
@@ -188,7 +192,7 @@ public class Dungeon
             for(int i = 0; i < currentRoom.Monsters.Count; ++i)
             {
                 // 몬스터가 죽지 않았을때
-                Monster monster = currentRoom.Monsters[i];
+                Monster monster = currentRoom.Monsters[i] as Monster;
                 if (currentRoom.Monsters[i].IsDead == false)
                 {
                     monstersTimeCounter[i] += 1.0f + monster.Status.agility * 0.1f;     // 민첩성 수치의 10%를 게이지 추가에 반영
@@ -221,10 +225,12 @@ public class Dungeon
                 // 해당 몬스터가 죽었다면
                 if (currentRoom.Monsters[i].IsDead == false && currentRoom.Monsters[i].CurrentHP <= 0)
                 {
+                    Monster m = currentRoom.Monsters[i] as Monster;
                     monstersTimeCounter[i] = 0;
 
                     // 몬스터의 죽음 처리
-                    Reward reward = currentRoom.Monsters[i].Die();
+                    currentRoom.Monsters[i].Die();
+                    Reward reward = m.GenerateReward();
 
                     // 플레이어에게 보상 전달
                     player.GetReward(reward);
@@ -239,7 +245,8 @@ public class Dungeon
                 int tg = (int)(monstersTimeCounter[i] / 20.0f); 
                 if (tg >= 20)
                 {
-                    currentRoom.Monsters[i].ActiveTurn(player);
+                    Monster m = currentRoom.Monsters[i] as Monster;
+                    m.ActiveTurn(player);
                     monstersTimeCounter[i] = 0;
                     anyStatusHasChanged = true;
 

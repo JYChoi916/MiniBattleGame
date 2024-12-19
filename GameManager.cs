@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography.X509Certificates;
 public enum GameStartType
 {
     New = 1,
@@ -16,20 +18,39 @@ public enum GameState
 }
 public class GameManager
 {
+    static GameManager instance;
+    public static GameManager Instance
+    {
+        get
+        {
+            if (instance == null)
+                instance = new GameManager();
+
+            return instance;
+        }
+    }
     GameState currentGameState = GameState.Ready;
     GameState nextGameState = GameState.Town;
     Player player;
     List<string> clearDungeonList;
     Dungeon currentDungeon;
 
-    public GameManager(GameStartType startType)
+    public GameManager()
 	{
+        instance = this;
+
         // 클리어 한 던전의 정보를 기록할 던전 ID 리스트
         clearDungeonList = new List<string>();
 
+        // 플레이어 생성
+        player = new Player();
+
         // 현재 입장한 던전은 없는 상태로 초기화 -> 던전에 입장하면 해당 던전의 클래스로 연결할 예정
         currentDungeon = null;
+    }
 
+    public void StartGame(GameStartType startType)
+    {
         switch (startType)
         {
             case GameStartType.New:
@@ -60,7 +81,7 @@ public class GameManager
             int select = Display.SelectYesOrNo();
             if (select == 1)
             {
-                player = new Player(playerName);
+                player.SetName(playerName);
                 player.SetClass(ClassType.Novice);
                 player.GetGold(500);
                 player.Inventory.SetTestInventory();
@@ -111,7 +132,7 @@ public class GameManager
         {
             Console.WriteLine();
             string titleString = "캐릭터 기본 능력치를 선택해 주세요";
-            int selectInput = Display.SelectInput(titleString, strings.ToArray()) - 1;
+            int selectInput = Display.SelectInput(titleString, strings.ToArray(), strings.Count) - 1;
 
             Console.WriteLine();
             Console.WriteLine(
@@ -153,7 +174,6 @@ public class GameManager
     private void LoadGame()
     {
     }
-
 
     bool SetState(GameState nextState)
     {
@@ -218,7 +238,7 @@ public class GameManager
             "4. 인 벤 토 리",
             "5. 게 임 종 료"
         };
-        int selectedMenu = Display.SelectInput(townIntroString, townMenuString);
+        int selectedMenu = Display.SelectInput(townIntroString, townMenuString, 5);
         switch(selectedMenu)
         {
             case 1:
@@ -267,7 +287,7 @@ public class GameManager
 
         Utility.MakeSameLengthStrings(dungeonSelectMenuString);
         
-        int selectedDungeonIndex = Display.SelectInput(dungeonSelectTitle, dungeonSelectMenuString.ToArray(), true);
+        int selectedDungeonIndex = Display.SelectInput(dungeonSelectTitle, dungeonSelectMenuString.ToArray(), dungeonSelectMenuString.Count, true);
         if (selectedDungeonIndex > 0)
         {
             DungeonData dungeonData = enabledDungeonData[selectedDungeonIndex - 1];
@@ -300,43 +320,57 @@ public class GameManager
         nextGameState = GameState.Town;
     }
 
-    void OpenInventory()
+    public void OpenInventory()
     {
         while (true)
         {
             Console.Clear();
+
             ItemSlot selectSlot = player.Inventory.ShowAndSelectInventory();
             if (selectSlot == null)
                 break;
 
             if (selectSlot != null)
             {
-                if (selectSlot.IsUsable())
+                Console.WriteLine($"{selectSlot.Name}, 사용하시겠습니까?");
+                int select = Display.SelectYesOrNo();
+                if (select == 1)
                 {
-                    Console.WriteLine($"{selectSlot.Name}, 사용하시겠습니까?");
-                    int select = Display.SelectYesOrNo();
-                    if (select == 1)
+                    if (selectSlot.IsEquipable())
                     {
-                        var cData = DataTables.GetConsumeItemData(selectSlot.GetItemData().itemID);
+                        Console.WriteLine("장비 아이템은 아직 미구현 입니다.");
+                        Console.ReadKey();
+                        continue;
+                    }
+                    
+                    if (selectSlot.IsEmpty)
+                    {
+                        Console.WriteLine("비어있는 아이템 슬롯입니다.");
+                        Console.ReadKey();
+                        continue;
+                    }
+
+                    if (selectSlot.IsUsable())
+                    {
+                        ConsumableItemData cData = DataTables.GetConsumeItemData(selectSlot.ItemID);
                         if (cData.itemTarget == CosumableItemTargetType.Player)
                         {
-                            var targets = new List<Character>();
-                            targets.Add(player);
-                            selectSlot.UseItem(player, targets);
+                            selectSlot.UseItem(player, null);
+                            continue;
+                        }
+                        else if (cData.itemTarget == CosumableItemTargetType.NonUsable)
+                        {
+                            Console.WriteLine("사용할 수 없는 아이템입니다.");
                             Console.ReadKey();
+                            continue;
                         }
                         else
                         {
-                            Console.WriteLine("마을에서는 사용할 수 없습니다.");
+                            Console.WriteLine("마을에서는 사용할 수 없는 아이템입니다.");
                             Console.ReadKey();
+                            continue;
                         }
                     }
-                }
-                else
-                {
-                    Console.WriteLine($"{selectSlot.Name} : 이 아이템은 사용 할 수 없는 아이템 입니다.");
-                    Console.WriteLine($"다른 아이템을 선택해주세요");
-                    Console.ReadKey();
                 }
             }
         }

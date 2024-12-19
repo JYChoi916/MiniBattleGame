@@ -28,6 +28,17 @@ public class ItemSlot
 
 	public string ItemID { get { return itemData != null ? itemData.itemID : ""; } }
 
+	public bool IsEquptable()
+	{
+        if (itemData == null) return false;
+
+		if (itemData.type == ItemType.Weapon ||  itemData.type == ItemType.Armor)
+		{
+			return true;
+		}
+
+		return false;
+    }
 
 	public bool IsUsable()
 	{
@@ -42,26 +53,51 @@ public class ItemSlot
 		return false; ;
 	}
 
-	// 호출 되었다는건 이미 소비할 수 있는 아이템이라는 판단 후
-	public void UseItem(Player player, List<Character> targets)
+	public bool UseItem(Player player, List<Character> targets)
 	{
-        ConsumableItemData cData = DataTables.GetConsumeItemData(itemData.itemID);
-        UsableItem item = new UsableItem(cData);
+		bool itemUsed = false;
+        if (IsUsable())
+        {
+            ConsumableItemData cData = DataTables.GetConsumeItemData(itemData.itemID);
+            UsableItem item = new UsableItem(cData);
 
-		foreach (var target in targets)
-		{
-			string str = $"{player.GetName()}, ";
-			str += player == target ? "자신" : $"{target.GetName()}";
+            if (targets == null)
+			{
+				targets = new List<Character>();
+				targets.Add(player);
+            }
 
-            Console.WriteLine($"{str}에게 {itemData.name} 사용!!");
-			item.Use(target, cData.itemParams);
+            for (int i = 0; i < targets.Count; ++i)
+            {
+                string str = $"{player.GetName()}, ";
+                str += player == targets[i] ? "자신" : $"{targets[i].GetName()}";
+
+                Console.WriteLine($"{str}에게 {itemData.name} 사용!!");
+                int paramIndex = i == 0 ? 0 : Math.Min(i, cData.itemParams.Count - 1);
+                item.Use(targets[i], cData.itemParams[paramIndex]);
+				itemUsed = true;
+            }
+
+            currentStack--;
+            if (currentStack <= 0)
+            {
+                RemoveItem();
+            }
+        }
+        else if (IsEquipable())
+        {
+            Console.WriteLine("장비 아이템은 아직 구현되지 않았습니다.");
+        }
+        else
+        {
+            Console.WriteLine($"{Name} : 이 아이템은 사용 할 수 없는 아이템 입니다.");
         }
 
-		currentStack--;
-		if (currentStack <= 0)
-		{
-			RemoveItem();
-        }
+        Console.WriteLine();
+        Console.WriteLine("키를 눌러 진행하세요...");
+        Console.ReadKey();
+
+		return itemUsed;
     }
 
 	public bool IsEquipable ()
@@ -107,7 +143,7 @@ public class Inventory
 	{
 		for (int i = 0; i < itemSlots.Count; i++) {
 			if (i < itemSlots.Count - 1) {
-				var itemData = DataTables.GetItemData(4);
+				var itemData = DataTables.GetItemData(Utility.GetRandom(4, 17));
 				itemSlots[i].AddItem(itemData, 1);
 			}
 			else
@@ -155,41 +191,49 @@ public class Inventory
 		}
     }
 
-	public ItemSlot ShowAndSelectInventory()
+	public ItemSlot ShowAndSelectInventory(bool onlyUsable = false)
 	{
 		List<string> itemSlotStrings = new List<string>();
 		string slotString = "";
-
+		List<ItemSlot> usableSlots = new List<ItemSlot>();
+		int number = 1;
         for (int i = 0; i < itemSlots.Count; ++i)
 		{
-			slotString += $"{i+1,2}. ";
-
-            int length = 15 - Encoding.Default.GetBytes(itemSlots[i].Name).Length;
-			length = Math.Clamp(length, 0, 15);
-            slotString += itemSlots[i].IsEmpty ? "---- 비어있음 ----" : "".PadLeft(length) + $"{itemSlots[i].Name}" + $" x{itemSlots[i].currentStack,2}";
-
-			int j = i + 1;
-			if (j % 4 == 0)
+			if (onlyUsable)
 			{
-				itemSlotStrings.Add(slotString);
-				slotString = "";
-            }
-			else
-				slotString += "    ";
+				if (itemSlots[i].IsEmpty || itemSlots[i].IsUsable() == false)
+					continue;
+			}
+
+			slotString += $"{number,2}. ";
+
+			string itemInfo = $"{itemSlots[i].Name}" + $" x {itemSlots[i].currentStack}";
+
+			slotString += itemSlots[i].IsEmpty ? "---- 비어있음 ----" : $"{itemInfo}";
+
+			itemSlotStrings.Add(slotString);
+			slotString = "";
+
+			if (onlyUsable)
+				usableSlots.Add(itemSlots[i]);
+
+            number++;
         }
 
         itemSlotStrings.Add(" 0. 돌아가기");
 		Utility.MakeSameLengthStrings(itemSlotStrings);
 
-		Console.WriteLine();
-        int selectedSlotIndex = Display.SelectInput("---------- 인벤토리 ---------", itemSlotStrings.ToArray(), true, true);
+		var itemSlotList = onlyUsable ? usableSlots : itemSlots;
+
+        Console.WriteLine();
+        int selectedSlotIndex = Display.SelectInput("---------- 인벤토리 ---------", itemSlotStrings.ToArray(), itemSlotList.Count, true, true);
 		if (selectedSlotIndex <= 0)
 		{
 			return null;
 		}
 		else
 		{
-			return itemSlots[selectedSlotIndex - 1];
+			return onlyUsable ? itemSlotList[selectedSlotIndex - 1] : itemSlots[selectedSlotIndex - 1];
         }
 	}
 }

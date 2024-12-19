@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Numerics;
 using System.Reflection.Emit;
 using System.Xml.Linq;
 
@@ -47,7 +48,6 @@ public class Character
 
     virtual public void RecoverHP(int recoverPoint)
     {
-        
         Console.Write($"{GetName()}, ");
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write($"{recoverPoint} ");
@@ -65,6 +65,10 @@ public class Character
         Console.WriteLine($" HP 회복 !!!!!");
         currentMP += recoverPoint;
         currentMP = currentMP > maxMP ? maxMP : currentMP;
+    }
+
+    virtual public void Die() {
+        isDead = true;
     }
 }
 
@@ -86,9 +90,8 @@ public class Player : Character, IAttackable
     Inventory inventory;
     public Inventory Inventory { get { return inventory; } }
 
-    public Player(string name) : base()
+    public Player() : base()
     {
-        this.name = name;
         gold = 0;
         inventory = new Inventory(20);
     }
@@ -119,6 +122,10 @@ public class Player : Character, IAttackable
         return playersInfo;
     }
 
+    public void SetName(string name)
+    {
+        this.name = name;
+    }
     public void SetClass(ClassType classType)
     {
         this.classType = classType;
@@ -202,7 +209,7 @@ public class Player : Character, IAttackable
         }
     }
 
-    public void Die()
+    public override void Die()
     {
         Console.WriteLine();
         Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -212,36 +219,127 @@ public class Player : Character, IAttackable
         Console.ReadKey();
     }
 
-    public void ActiveTurn(List<Monster> monsters)
+    public void ActiveTurn(List<Character> monsters)
     {
         Console.WriteLine();
         Console.WriteLine($"{name}의 턴입니다!!");
-        // 스킬 사용 및 일반 공격 선택 
-
-        // 스킬 사용
-
-        // 일반 공격
-        int targetMonsterIndex = SeletectTargetIndex(monsters);
-        Attack(monsters[targetMonsterIndex]);
-        Console.WriteLine();
-        Console.WriteLine("키를 눌러 턴을 종료하세요");
+        // 일반 공격 / 스킬 사용 / 아이템 사용 선택 
         ConsoleKeyInfo cki = Console.ReadKey();
         if (cki.Key == ConsoleKey.C)
         {
-            monsters.ForEach(m => m.Die());
+            for(int i = 0; i < monsters.Count; ++i)
+            {
+                Monster m = monsters[i] as Monster;
+                m.Die();
+            } 
         }
+
+        bool usedTurn = false;
+
+        while (!usedTurn)
+        {
+            string[] actionStrings =
+            {
+                "1. 일 반 공 격",
+                "2. 아이템 사용",
+                //"3. 스 킬 사 용",
+                "0. 도 망 치 기"
+            };
+
+            int selectedAction = Display.SelectInput("행동을 선택해 주세요", actionStrings, actionStrings.Length, true);
+            
+            switch (selectedAction)
+            {
+                case 1:
+                    int targetMonsterIndex = SeletectTargetIndex(monsters);
+                    if (targetMonsterIndex >= 0)
+                    {
+                        Attack(monsters[targetMonsterIndex]);
+                        usedTurn = true;
+                    }
+                    break;
+                case 2:
+                    usedTurn = SelectAndUseItem(monsters);
+                    break;
+                //case 3:
+                //    break;
+                case 0:
+                    usedTurn = true;
+                    break;
+            }
+        }
+
+        // 일반 공격
+
+
+        // 아이템 사용
+
+
+        // 스킬 사용
+
+        Console.WriteLine();
+        Console.WriteLine("키를 눌러 턴을 종료하세요");
+        Console.ReadKey();
     }
 
-    public int SeletectTargetIndex(List<Monster> monsters)
+    public bool SelectAndUseItem(List<Character> monsters)
+    {
+        bool itemUsed;
+        List<Character> targets = new List<Character>();
+        while (true)
+        {
+            ItemSlot slot = inventory.ShowAndSelectInventory(true);
+            if (slot != null)
+            {
+                ConsumableItemData cData = DataTables.GetConsumeItemData(slot.ItemID);
+                if (cData.itemTarget == CosumableItemTargetType.Player)
+                {
+                    targets.Add(this);
+                }
+                else
+                {
+                    int selectTargetIndex = SeletectTargetIndex(monsters);
+                    targets.Add(monsters[selectTargetIndex]);
+                    if (cData.useType == ItemUseType.AreaDamage)
+                    {
+                        if (selectTargetIndex > 0)
+                            targets.Add(monsters[selectTargetIndex - 1]);
+
+                        if (selectTargetIndex < monsters.Count - 1)
+                            targets.Add(monsters[selectTargetIndex + 1]);
+                    }
+                }
+
+                Console.WriteLine($"{slot.Name}, 사용하시겠습니까?");
+                int select = Display.SelectYesOrNo();
+                if (select == 1)
+                {
+                    if (slot.UseItem(this, targets))
+                        return true;
+                }
+            }
+            else
+            {
+                break;
+            }
+        }
+        return false;
+    }
+
+    public int SeletectTargetIndex(List<Character> monsters)
     {
         List<Monster> targets = new List<Monster>();
         List<string> targetMonsterNames = new List<string>();
         for (int i = 0; i < monsters.Count; i++)
         {
-            targetMonsterNames.Add($"{i+1}. {monsters[i].monsterUniqueName}");
+            Monster m = monsters[i] as Monster;
+            targetMonsterNames.Add($"{i+1}. {m.monsterUniqueName}");
         }
+        targetMonsterNames.Add("0. 취소");
+        Utility.MakeSameLengthStrings(targetMonsterNames);
+
         Console.WriteLine();
-        return Display.SelectInput("공격할 대상을 선택하세요", targetMonsterNames.ToArray()) - 1;
+        return Display.SelectInput("공격할 대상을 선택하세요", targetMonsterNames.ToArray(), targetMonsterNames.Count, true) - 1;
     }
 
     public void GetReward(Reward reward)
@@ -305,13 +403,14 @@ public class Player : Character, IAttackable
                                         continue;
                                     }
                                 }
-                                else break;                                
+                                else break;
                             }
                         }
                         else
                         {
                             Console.WriteLine();
                             Console.WriteLine("아이템을 포기합니다.");
+                            break;
                         }
                     }
                 }
@@ -375,9 +474,8 @@ public class Monster : Character, IAttackable
         return monsterInfos;
     }
 
-    public Reward Die()
+    public Reward GenerateReward()
     {
-        isDead = true;
         Console.WriteLine();
         Console.WriteLine($"=>{monsterUniqueName}의 죽음!!!");
         Reward reward = new Reward();

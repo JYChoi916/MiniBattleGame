@@ -1,12 +1,4 @@
 ﻿using System;
-public class Item
-{
-	ItemData data;
-	public Item(ItemData data)
-    {
-        this.data = data;
-    }
-}
 
 public class Equipment
 {
@@ -34,38 +26,31 @@ public class Armor
 	ArmorData data;
 }
 
-public class ConsumableItem
+public class UsableItem
 {
-	protected ConsumableItemData data;
-	public ConsumableItem(ConsumableItemData data)
-	{
-		this.data = data;
-	}
-}
-
-public class UsableItem : ConsumableItem
-{
-    public UsableItem(ConsumableItemData data) : base(data)
+    ConsumableItemData data;
+    public UsableItem(ConsumableItemData data)
     {
+        this.data = data;
     }
 
-	public void Use(Character character, List<int> param)
+	public void Use(Character character, int param)
 	{
 		if (data.itemTarget == CosumableItemTargetType.Player)
 		{
 			switch(data.useType)
 			{
 				case ItemUseType.RecoverHP:
-					character.RecoverHP(param[0]);
+					character.RecoverHP(param);
                     break;
 				case ItemUseType.RecoverMP:
-					character.RecoverMP(param[0]);
+					character.RecoverMP(param);
 					break;
 				case ItemUseType.Damage:
                 case ItemUseType.AreaDamage:
-					character.GetDamage(param[0]);
+					character.GetDamage(param);
 					break;
             }
 		}
-	}
+    }
 }

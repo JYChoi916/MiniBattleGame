@@ -20,18 +20,20 @@ namespace MiniBattleGame
                 "1. 새로운  게임", 
                 "2. 게임불러오기", 
                 "3. 게 임  종 료" };
-            int selectedMenu = Display.SelectInput("", menuStrings);
+            int selectedMenu = Display.SelectInput("", menuStrings, 3);
 
             if (selectedMenu == 3)
-                return;
-
-            GameManager gameManager = new GameManager((GameStartType)selectedMenu);
-
-            while(gameManager.Play())
             {
+                Console.WriteLine("게임을 종료 합니다.");
+                return;
             }
 
-            Console.WriteLine("게임을 종료 합니다.");
+            GameManager gameManager = new GameManager();
+            gameManager.StartGame((GameStartType)selectedMenu);
+
+            while (gameManager.Play())
+            {
+            }
         }
     }
 }

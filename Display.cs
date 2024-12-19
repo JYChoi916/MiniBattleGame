@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 public static class Display
 {
-    public static int SelectInput(string titleString, string[] menuStrings, bool hasZero = false, bool isLineInput = false)
+    public static int SelectInput(string titleString, string[] menuStrings, int maxNumber, bool hasZero = false, bool isLineInput = false)
     {
         Console.ResetColor();
         List<string> selectStringLines = new List<string>();
@@ -57,7 +57,7 @@ public static class Display
                 else
                 {
                     selectNumber = consoleKeyInfo.KeyChar - '0';
-                    if (selectNumber > menuStrings.Length)
+                    if (selectNumber > maxNumber)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine();
@@ -72,7 +72,7 @@ public static class Display
                 inputLine = Console.ReadLine();
                 if(int.TryParse(inputLine, out selectNumber))
                 {
-                    if (selectNumber > menuStrings.Length)
+                    if (selectNumber > maxNumber)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine();
@@ -105,7 +105,7 @@ public static class Display
             "1.   예  ",
             "2. 아니오"
             };
-        int select = SelectInput("", selectString);
+        int select = SelectInput("", selectString, 2);
         return select;
     }
 
@@ -171,7 +171,7 @@ public static class Display
         Console.WriteLine(lineString);
         Console.ResetColor();
     }
-    public static void MonstersInfo(List<Monster> monsters)
+    public static void MonstersInfo(List<Character> monsters)
     {
         List<string>monstersInfo = new List<string>();
 
@@ -179,7 +179,8 @@ public static class Display
 
         for(int i = 0; i < monsters.Count; ++i)
         {
-            string[] infos = monsters[i].GetMonsterInfos();
+            Monster m = monsters[i] as Monster;
+            string[] infos = m.GetMonsterInfos();
             monstersInfo.Add($"{Utility.Half2Full($"   몬스터{i + 1}")} : {infos[0]}    {infos[1]}     ");
         }
 
