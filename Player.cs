@@ -43,7 +43,7 @@ public class Player : Character, IAttackable
             weaponData = DataTables.GetWeaponData(data.itemID);
         }
 
-        int weaponDamage = weaponDamage = GameManager.CaclulateWeaponDamage(weaponData, status);
+        int weaponDamage = GameManager.CaclulateWeaponDamage(weaponData, status);
         int statusDamage = GameManager.CalculateStatusDamage(weaponData, status, level);
 
         string[] playersInfo =
@@ -198,7 +198,7 @@ public class Player : Character, IAttackable
             {
                 "1. 일 반 공 격",
                 "2. 아이템 사용",
-                //"3. 스 킬 사 용",
+                "3. 스 킬 사 용",
                 "0. 도 망 치 기"
             };
 
@@ -217,21 +217,13 @@ public class Player : Character, IAttackable
                 case 2:
                     usedTurn = SelectAndUseItem(monsters);
                     break;
-                //case 3:
-                //    break;
+                case 3:
+                    break;
                 case 0:
                     usedTurn = true;
                     break;
             }
         }
-
-        // 일반 공격
-
-
-        // 아이템 사용
-
-
-        // 스킬 사용
 
         Console.WriteLine();
         Console.WriteLine("키를 눌러 턴을 종료하세요");
@@ -404,7 +396,12 @@ public class Player : Character, IAttackable
         if(equipmentSlot.equipedItem != null)
         {
             ItemData itemData = equipmentSlot.equipedItem.data;
-            return AddItemToInventory(itemData, $"{itemData.name}을 해제 할 수 없습니다.");
+            bool unequipmentSuccess = AddItemToInventory(itemData, $"{itemData.name}을 해제 할 수 없습니다.");
+            if (unequipmentSuccess)
+            {
+                equipmentSlot.equipedItem = null;
+            }
+            return unequipmentSuccess;
         }
 
         return true;

@@ -461,8 +461,8 @@ public class GameManager
     {
         int baseWeaponDamage = CaclulateWeaponDamage(weaponData, status);
 
-        int sign = Utility.GetRandom(-1, 2);
-        int randomAtk = (int)(baseWeaponDamage * 0.05f * sign);
+        int sign = Utility.GetRandom(-5, 6);
+        int randomAtk = (int)(baseWeaponDamage * 0.01f * sign);
         baseWeaponDamage += randomAtk;
         int damage = baseWeaponDamage + CalculateStatusDamage(weaponData, status, level);
         if (weaponData != null)
@@ -477,8 +477,6 @@ public class GameManager
 
         int firstDamageStat = status.strength;
         if (weaponData.attackType == ItemAttackType.Range) firstDamageStat = status.dexterity;
-        int secondDamageStat = status.dexterity;
-        if (weaponData.attackType == ItemAttackType.Range) secondDamageStat = status.strength;
         int baseWeaponDamage = (int)(weaponData.plusATK * ((firstDamageStat + 200.0f) * 0.005f));
         return baseWeaponDamage;
     }
